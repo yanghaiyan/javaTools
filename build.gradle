@@ -1,0 +1,32 @@
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+apply plugin: 'war'
+apply plugin: 'idea'
+sourceCompatibility = 1.8
+
+group 'javaTools'
+version '1.0-SNAPSHOT'
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Quickstart',
+                'Implementation-Version': version
+    }
+}
+
+repositories {
+    //mavenLocal()
+    maven { url "http://10.0.109.63:8081/nexus/content/repositories/public/" }
+    maven { url "http://10.0.109.63:8081/nexus/content/repositories/snapshots/"}
+    maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'io.netty', name: 'netty-all', version: '4.1.28.Final'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.5'
+    compile "com.alibaba:fastjson:1.1.22"
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
+    compile group: 'com.google.guava', name: 'guava', version: '27.0-jre'
+}
