@@ -7,7 +7,5 @@ public class BasicException extends Exception{
   }
 
   public BasicException(String message) {
-
-
   }
 }
