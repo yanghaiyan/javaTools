@@ -2,20 +2,22 @@ package netty.entity;
 
 /**
  * 请求实体类
+ *
  * @author YHY
  */
 public class RequestEntity {
 
   private String content;
-
-
-
   private String version;
   private String extension;
 
-  public RequestEntity(String content, String version) {
+  public RequestEntity(String version, String content) {
     this.content = content;
     this.version = version;
+  }
+
+  public RequestEntity() {
+
   }
 
   public String getContent() {

@@ -35,14 +35,15 @@ public class HttpClientServer {
   }
 
   public ResponseEntity doPost(String host, int port, String jsonStr) throws BasicException {
-    String url = "http://" + host + ":" + port;
+    String url = "http://" + host + ":" + port + "/post";
     HttpPost httpPost = new HttpPost(url);
     try {
       StringEntity entity = new StringEntity(jsonStr);
       entity.setContentEncoding("UTF-8");
+      httpPost.setHeader(CONTENT_TYPE, APPLICATION_JSON);
       entity.setContentType(APPLICATION_JSON);
       httpPost.setEntity(entity);
-      httpPost.setHeader(CONTENT_TYPE, APPLICATION_JSON);
+
       response = httpClient.execute(httpPost);
 
       String result = EntityUtils.toString(response.getEntity());
@@ -72,9 +73,10 @@ public class HttpClientServer {
 
   public static void main(String[] args) {
     HttpClientServer clientServer = new HttpClientServer();
-    RequestEntity request = new RequestEntity("hello","1.0");
-    try {
-      ResponseEntity response = clientServer.doPost("127.0.0.1",8099,JSON.toJSONString(request));
+    RequestEntity request = new RequestEntity("1.0","hello");
+    String str = JSON.toJSONString(request);
+      try {
+      ResponseEntity response = clientServer.doPost("127.0.0.1", 8099,str);
       System.out.println(JSON.toJSONString(response));
     } catch (BasicException e) {
       e.printStackTrace();

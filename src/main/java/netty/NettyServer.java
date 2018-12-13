@@ -7,85 +7,85 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.sctp.nio.NioSctpServerChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-
 public class NettyServer {
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
-    private static NettyServerHandle handler = new NettyServerHandle();
-    private Thread thread = null;
 
-    EventLoopGroup bossGroup = new NioEventLoopGroup();
-    EventLoopGroup workerGroup = new NioEventLoopGroup();
+  private Logger logger = LoggerFactory.getLogger(this.getClass());
+  private static NettyServerHandle handler = new NettyServerHandle();
+  private Thread thread = null;
 
-    private String ip;
-    private int port;
+  EventLoopGroup bossGroup = new NioEventLoopGroup();
+  EventLoopGroup workerGroup = new NioEventLoopGroup();
 
-    public NettyServer(String ip, int port) {
-        this.ip = ip;
-        this.port = port;
+  private String ip;
+  private int port;
+
+  public NettyServer(String ip, int port) {
+    this.ip = ip;
+    this.port = port;
+  }
+
+  public void start() throws Exception {
+    /**
+     * 检查端口
+     */
+    if (!PortCheckerHelper.checkPort("", port)) {
+      throw new Exception("请确保内部端口" + port + "没有被占用");
     }
-
-    public void start() throws Exception {
-        /**
-         * 检查端口
-         */
-        if (!PortCheckerHelper.checkPort(null, port)) {
-            throw new Exception("请确保内部端口" + port + "没有被占用");
-        }
-        InetSocketAddress address = null;
-        if (ip.equals("*")) {
-            address = new InetSocketAddress(port);
-        } else {
-            address = new InetSocketAddress(InetAddress.getByName(ip), port);
-        }
-        final InetSocketAddress address1 = address;
-        final String addressInfo = ip + ":" + port;
-        thread = new Thread() {
-
-            @Override
-            public void run() {
-                super.run();
-                try {
-                    ServerBootstrap boot = new ServerBootstrap();
-                    boot.group(bossGroup, workerGroup).channel(NioSctpServerChannel.class)
-                            .option(ChannelOption.SO_BACKLOG, 100)
-                            .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
-                            .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
-                            .handler(new LoggingHandler(LogLevel.INFO))
-                            .childHandler(new NettyServerInitializer(handler));
-
-                    /*Start the Server*/
-                    ChannelFuture future = boot.bind(address1).sync();
-                    logger.info("Netty Server start success!{" + addressInfo + "}");
-                    // Wait until the server socket is closed.
-                    future.channel().closeFuture().sync();
-                } catch (InterruptedException e) {
-                    logger.error("NettyServer start fail{" + addressInfo + "}");
-                } finally {
-                    workerGroup.shutdownGracefully();
-                    bossGroup.shutdownGracefully();
-                }
-            }
-        };
-        thread.start();
+    InetSocketAddress address = null;
+    if (ip.equals("*")) {
+      address = new InetSocketAddress(port);
+    } else {
+      address = new InetSocketAddress(InetAddress.getByName(ip), port);
     }
+    final InetSocketAddress address1 = address;
+    final String addressInfo = ip + ":" + port;
+    thread = new Thread() {
 
-    public void stop() throws Exception {
+      @Override
+      public void run() {
+        super.run();
         try {
-            workerGroup.shutdownGracefully();
-            bossGroup.shutdownGracefully();
-        } catch (Exception ex) {
-            logger.error("Netty Service stop fail");
+          ServerBootstrap boot = new ServerBootstrap();
+          boot.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
+              .option(ChannelOption.SO_BACKLOG, 100)
+              .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
+              .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
+              .handler(new LoggingHandler(LogLevel.INFO))
+              .childHandler(new NettyServerInitializer(handler));
+
+          /*Start the Server*/
+          ChannelFuture future = boot.bind(address1).sync();
+          logger.info("Netty Server start success!{" + addressInfo + "}");
+          // Wait until the server socket is closed.
+          future.channel().closeFuture().sync();
+        } catch (InterruptedException e) {
+          logger.error("NettyServer start fail{" + addressInfo + "}");
+        } finally {
+          workerGroup.shutdownGracefully();
+          bossGroup.shutdownGracefully();
         }
-        logger.info("Netty Service stop success!");
-        thread.interrupt();
+      }
+    };
+    thread.start();
+  }
+
+  public void stop() throws Exception {
+    try {
+      workerGroup.shutdownGracefully();
+      bossGroup.shutdownGracefully();
+    } catch (Exception ex) {
+      logger.error("Netty Service stop fail");
     }
+    logger.info("Netty Service stop success!");
+    thread.interrupt();
+  }
 
 }

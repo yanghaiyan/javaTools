@@ -13,7 +13,7 @@ import java.net.Socket;
 public class PortCheckerHelper {
 
     public static boolean checkPort(String ip, int port) {
-        return checkPort(ip, port);
+        return checkPort(ip, port,1000);
     }
 
     /**

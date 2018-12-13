@@ -11,6 +11,9 @@ public class ResponseEntity {
   private String success;
   private String extension;
 
+  public ResponseEntity() {
+  }
+
   public ResponseEntity(String version, String content) {
     this.version = version;
     this.content = content;
@@ -66,7 +69,6 @@ public class ResponseEntity {
         ", extension='" + extension + '\'' +
         '}';
   }
-
 
 
 }

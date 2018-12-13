@@ -4,8 +4,12 @@ import netty.NettyServer;
 
 public class NettyApplication {
 
-  public static void main(String[] args) throws Exception {
+  public static void main(String[] args)  {
     NettyServer server = new NettyServer("127.0.0.1",8099);
-    server.start();
+    try {
+      server.start();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 }

@@ -35,7 +35,7 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
   private static final String APPLICATION_JSON = "application/json";
   private static final String TEXT_JSON = "text/json";
   private static final String TEXT_PLAIN = "text/plain";
-  String URL = "http://127.0.0.1";
+  String URL = "/post";
 
 
   @Override
@@ -139,7 +139,8 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
     }
 
     try {
-      requestEntity = JSON.parseObject(new String(reqBytes, "UTF-8"), RequestEntity.class);
+      String reqContent = new String(reqBytes, "UTF-8");
+      requestEntity = JSON.parseObject(reqContent,RequestEntity.class);
     } catch (UnsupportedEncodingException e) {
       respStatus = HttpResponseStatus.BAD_REQUEST;
       throw new BasicException("httpÏûÏ¢½âÎöÊ§°Ü");
