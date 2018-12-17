@@ -46,7 +46,7 @@ public class HttpClientServer {
 
       response = httpClient.execute(httpPost);
 
-      String result = EntityUtils.toString(response.getEntity());
+      String result = EntityUtils.toString(response.getEntity(),"utf-8");
       responseEntity = JSON.parseObject(result, ResponseEntity.class);
 
     } catch (Exception e) {

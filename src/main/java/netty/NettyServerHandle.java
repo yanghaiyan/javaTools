@@ -2,6 +2,7 @@ package netty;
 
 import static io.netty.buffer.Unpooled.wrappedBuffer;
 import static io.netty.handler.codec.http.HttpHeaderNames.CONNECTION;
+import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_LENGTH;
 import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_TYPE;
 import static io.netty.handler.codec.http.HttpMethod.GET;
 import static io.netty.handler.codec.http.HttpMethod.POST;
@@ -10,6 +11,7 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 import com.alibaba.fastjson.JSON;
 import exception.BasicException;
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
@@ -26,12 +28,15 @@ import java.util.ArrayList;
 import java.util.List;
 import netty.entity.RequestEntity;
 import netty.entity.ResponseEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author YHY
  */
 public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpRequest> {
 
+  private Logger logger = LoggerFactory.getLogger(this.getClass());
   private static final String APPLICATION_JSON = "application/json";
   private static final String TEXT_JSON = "text/json";
   private static final String TEXT_PLAIN = "text/plain";
@@ -182,13 +187,13 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
 
       if (keepAlive) {
         //Add 'Content-Length' header only for a keep -alive connection
-        response.headers().set(CONTENT_TYPE, response.content().readableBytes());
+        response.headers().set(CONTENT_LENGTH, response.content().readableBytes());
         // Add keep alive header as per:
         response.headers().set(CONNECTION, HttpHeaderValues.KEEP_ALIVE);
         ctx.write(response);
         ctx.flush();
       } else {
-        ctx.write(response);
+        ctx.write(response).addListener(ChannelFutureListener.CLOSE);
         ctx.flush();
       }
     }
@@ -202,6 +207,7 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
 
   @Override
   public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+    logger.error("·þÎñÒì³£",cause);
     ctx.channel().close();
   }
 }

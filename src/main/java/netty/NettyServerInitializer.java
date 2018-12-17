@@ -24,6 +24,7 @@ public class NettyServerInitializer extends ChannelInitializer<SocketChannel> {
         p.addLast("decoder", new HttpRequestDecoder());
         // 使用HttpObjectAggregator将http请求合并成一个FullHttpRequest ，
         // 包括HttpRequest,HttpContent,HttpLastContent
+        // 解决拆包和分包的问题
         p.addLast("aggegator", new HttpObjectAggregator(1024 * 1024 * 64));
         // encoder
         p.addLast("encoder", new HttpResponseEncoder());
