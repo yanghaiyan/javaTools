@@ -7,6 +7,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
+import io.netty.handler.stream.ChunkedWriteHandler;
 
 public class NettyServerInitializer extends ChannelInitializer<SocketChannel> {
 
@@ -28,6 +29,7 @@ public class NettyServerInitializer extends ChannelInitializer<SocketChannel> {
         p.addLast("aggegator", new HttpObjectAggregator(1024 * 1024 * 64));
         // encoder
         p.addLast("encoder", new HttpResponseEncoder());
+        p.addLast("chunked",new ChunkedWriteHandler());
         // main handler
         p.addLast("handler", handlerAdapter);
         // ip filter

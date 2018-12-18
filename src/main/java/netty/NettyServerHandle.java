@@ -10,24 +10,36 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 import com.alibaba.fastjson.JSON;
 import exception.BasicException;
+import helper.FileHelper;
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelProgressiveFuture;
+import io.netty.channel.ChannelProgressiveFutureListener;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
+import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpHeaderValues;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpUtil;
+import io.netty.handler.codec.http.LastHttpContent;
+import io.netty.handler.stream.ChunkedFile;
 import io.netty.util.ReferenceCountUtil;
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
+import javax.activation.MimetypesFileTypeMap;
 import netty.entity.RequestEntity;
 import netty.entity.ResponseEntity;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,6 +69,7 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
 
       ResponseEntity responseEntity = new ResponseEntity("1.1.0", "I am server");
       responseEntity.setSuccess("success");
+
       ByteBuf bufRep = generateRspByteBuf(responseEntity, respStatus);
       writeResponse(request, respStatus, ctx, bufRep);
     } catch (Exception e) {
@@ -199,6 +212,99 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
       }
     }
 
+  }
+
+  private ResponseEntity processGet(FullHttpRequest request, HttpResponseStatus respStatus,
+      ChannelHandlerContext ctx)
+      throws BasicException {
+
+    ResponseEntity responseEntity = new ResponseEntity("1.1.0", "I am server");
+
+    String uri = request.uri();
+    if (StringUtils.isBlank(uri)) {
+      respStatus = HttpResponseStatus.NOT_FOUND;
+      throw new BasicException("http路径错误");
+    }
+    final String path = FileHelper.getFilePath(this.getClass()) + uri;
+    File file = new File(path);
+
+    if (file.isHidden() || !file.exists()) {
+      responseEntity.setError(" file is not exist!");
+      respStatus = HttpResponseStatus.NOT_FOUND;
+      return responseEntity;
+    }
+    if (file.isDirectory()) {
+      responseEntity.setError(" file is isDirectory!");
+      respStatus = HttpResponseStatus.NOT_FOUND;
+      return responseEntity;
+    }
+
+    if (!file.isFile()) {
+      responseEntity.setError(" this is not file!");
+      respStatus = HttpResponseStatus.NOT_FOUND;
+      return responseEntity;
+    }
+
+    RandomAccessFile randomAccessFile = null;
+    try {
+      randomAccessFile = new RandomAccessFile(file, "r");
+
+      FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, respStatus);
+      response.headers().set(CONTENT_TYPE, getFileType(file));
+      writeFileResponse(ctx, randomAccessFile, response, request);
+    } catch (Exception e) {
+      logger.error("Open file error ", e);
+      responseEntity.setError(" this is not file!");
+      respStatus = HttpResponseStatus.NOT_FOUND;
+    }
+
+    return responseEntity;
+  }
+
+
+  private static String getFileType(File file) {
+    MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
+    return mimeTypesMap.getContentType(file.getPath());
+  }
+
+  private void writeFileResponse(ChannelHandlerContext ctx, RandomAccessFile randomAccessFile,
+      FullHttpResponse response, FullHttpRequest request) throws IOException {
+    long fileLength = randomAccessFile.length();
+    HttpUtil.setContentLength(response, fileLength);
+    if (HttpUtil.isKeepAlive(request)) {
+      response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
+    }
+    ctx.write(response);
+    ChannelFuture sendFileFuture;
+    //通过Netty的ChunkedFile对象直接将文件写入发送到缓冲区中
+    sendFileFuture = ctx.write(new ChunkedFile(randomAccessFile, 0,
+        fileLength, 8192), ctx.newProgressivePromise());
+    sendFileFuture.addListener(new ChannelProgressiveFutureListener() {
+
+      @Override
+      public void operationProgressed(ChannelProgressiveFuture future,
+          long progress, long total) {
+        if (total < 0) { // total unknown
+          System.err.println("Transfer progress: " + progress);
+        } else {
+          System.err.println("Transfer progress: " + progress + " / "
+              + total);
+        }
+      }
+
+      @Override
+      public void operationComplete(ChannelProgressiveFuture future)
+          throws Exception {
+        System.out.println("Transfer complete.");
+      }
+    });
+
+    ChannelFuture lastContentFuture = ctx
+        .writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT);
+    //如果不支持keep-Alive，服务器端主动关闭请求
+    if (!HttpUtil.isKeepAlive(request)) {
+      lastContentFuture.addListener(ChannelFutureListener.CLOSE);
+    }
   }
 
   @Override

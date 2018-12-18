@@ -1,10 +1,9 @@
 package netty.ssl;
 
+import helper.FileHelper;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 import javax.net.ssl.KeyManager;
@@ -22,7 +21,7 @@ public class ContextSSLFactory {
   /**
    * keystore path.
    */
-  private static String KEY_STORE_PATH = "keystore/keystore.jks";
+  private static String KEY_STORE_PATH = "/keystore/keystore.jks";
   /**
    * keystore password
    */
@@ -94,7 +93,8 @@ public class ContextSSLFactory {
     KeyStore keyStore = null;
 
     try {
-      inputStream = new FileInputStream(new File(getFilePath() + KEY_STORE_PATH));
+      inputStream = new FileInputStream(
+          new File(FileHelper.getFilePath(this.getClass()) + KEY_STORE_PATH));
       keyStore = KeyStore.getInstance("JKS");
       keyStore.load(inputStream, KEYSTORE_PWD.toCharArray());
     } catch (Exception e) {
@@ -112,25 +112,6 @@ public class ContextSSLFactory {
     return keyStore;
   }
 
-  /**
-   * 获取文件路径
-   */
-  private String getFilePath() {
-    String filePath = ContextSSLFactory.class.getProtectionDomain().getCodeSource().getLocation()
-        .getPath();
-    filePath = filePath.substring(1, filePath.length());
-
-    try {
-      filePath = URLDecoder.decode(filePath, "utf-8");
-    } catch (UnsupportedEncodingException e) {
-      logger.error("url decode error", e);
-    }
-
-    int lastIndex = filePath.lastIndexOf("/") + 1;
-    filePath = filePath.substring(0, lastIndex);
-
-    return filePath;
-  }
 
   /**
    * 获取信任的锚点
