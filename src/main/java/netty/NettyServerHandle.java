@@ -145,7 +145,7 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
 
     try {
       String reqContent = new String(reqBytes, "UTF-8");
-      requestEntity = JSON.parseObject(reqContent,RequestEntity.class);
+      requestEntity = JSON.parseObject(reqContent, RequestEntity.class);
     } catch (UnsupportedEncodingException e) {
       respStatus = HttpResponseStatus.BAD_REQUEST;
       throw new BasicException("http消息解析失败");
@@ -192,6 +192,7 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
         response.headers().set(CONNECTION, HttpHeaderValues.KEEP_ALIVE);
         ctx.write(response);
         ctx.flush();
+
       } else {
         ctx.write(response).addListener(ChannelFutureListener.CLOSE);
         ctx.flush();
@@ -207,7 +208,7 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
 
   @Override
   public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-    logger.error("服务异常",cause);
+    logger.error("服务异常", cause);
     ctx.channel().close();
   }
 }

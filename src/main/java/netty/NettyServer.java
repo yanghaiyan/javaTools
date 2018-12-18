@@ -15,6 +15,9 @@ import java.net.InetSocketAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/***
+ * netty ·þÎñ¶Ë
+ */
 public class NettyServer {
 
   private Logger logger = LoggerFactory.getLogger(this.getClass());
