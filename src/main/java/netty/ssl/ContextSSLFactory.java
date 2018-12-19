@@ -21,7 +21,7 @@ public class ContextSSLFactory {
   /**
    * keystore path.
    */
-  private static String KEY_STORE_PATH = "/keystore/keystore.jks";
+  private static String KEY_STORE_PATH = "/keystore/keystore2.jks";
   /**
    * keystore password
    */
@@ -29,7 +29,7 @@ public class ContextSSLFactory {
   /**
    * SSL Version.
    */
-  private static String sslVersion = "SSLv3";
+  private static String sslVersion = "TLS";
 
   /**
    * 随机种子
@@ -59,7 +59,7 @@ public class ContextSSLFactory {
     return sslEngine;
   }
 
-  public ContextSSLFactory() {
+  private ContextSSLFactory() {
     init();
   }
 
@@ -73,7 +73,7 @@ public class ContextSSLFactory {
       KeyManager[] keyManagers = getKeyManagersServer(keyStore);
 
       SSLContext sslContext = SSLContext.getInstance(sslVersion);
-      sslContext.init(keyManagers, trustManagers, secureRandom);
+      sslContext.init(keyManagers, trustManagers, null);
       sslContext.createSSLEngine().getSupportedCipherSuites();
 
       sslEngine = sslContext.createSSLEngine();
@@ -93,6 +93,7 @@ public class ContextSSLFactory {
     KeyStore keyStore = null;
 
     try {
+
       inputStream = new FileInputStream(
           new File(FileHelper.getFilePath(this.getClass()) + KEY_STORE_PATH));
       keyStore = KeyStore.getInstance("JKS");
@@ -112,7 +113,6 @@ public class ContextSSLFactory {
     return keyStore;
   }
 
-
   /**
    * 获取信任的锚点
    */
@@ -130,6 +130,11 @@ public class ContextSSLFactory {
     return kms;
   }
 
+  /**
+   *
+   * @param keyStore
+   * @return
+   */
   private KeyManager[] getKeyManagersServer(KeyStore keyStore) {
     KeyManager[] kms = null;
 

@@ -17,7 +17,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 /**
- * httpClient 的客户端
+ * httpclient 的客户端
  */
 public class HttpClientServer {
 
@@ -60,7 +60,7 @@ public class HttpClientServer {
   }
 
   public ResponseEntity doGet(String host, int port, String jsonStr) throws BasicException {
-    String url = "http://" + host + ":" + port + "/get";
+    String url = "https://" + host + ":" + port + "/post";
     HttpGet httpGet = new HttpGet(url);
     try {
       response = httpClient.execute(httpGet);

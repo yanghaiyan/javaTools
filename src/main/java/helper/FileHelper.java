@@ -20,8 +20,8 @@ public class FileHelper {
       throw new BasicException("url decode error", e);
     }
 
-//    int lastIndex = filePath.lastIndexOf("/") + 1;
-//    filePath = filePath.substring(0, lastIndex);
+    int lastIndex = filePath.lastIndexOf("/") + 1;
+    filePath = filePath.substring(0, lastIndex);
 
     return filePath;
   }

@@ -62,16 +62,13 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
     FullHttpRequest request = msg;
     try {
       InetSocketAddress remoteAddress = (InetSocketAddress) ctx.channel().remoteAddress();
-      checkoutUrl(URL, request.uri(), respStatus);
-      checkoutMethod(request, respStatus);
-      RequestEntity requestEntity = getContent(request, respStatus);
-      System.out.println(requestEntity.toString());
+      ResponseEntity responseEntity = processMethod(request, respStatus, ctx);
 
-      ResponseEntity responseEntity = new ResponseEntity("1.1.0", "I am server");
-      responseEntity.setSuccess("success");
+      if (responseEntity != null) {
+        ByteBuf bufRep = generateRspByteBuf(responseEntity, respStatus);
+        writeResponse(request, respStatus, ctx, bufRep);
+      }
 
-      ByteBuf bufRep = generateRspByteBuf(responseEntity, respStatus);
-      writeResponse(request, respStatus, ctx, bufRep);
     } catch (Exception e) {
       ByteBuf bufRep = wrappedBuffer("error".getBytes("UTF-8"));
       writeResponse(request, respStatus, ctx, bufRep);
@@ -96,18 +93,34 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
   /***
    * Checkout method
    * @param request
-   * @param responseStatus
+   * @param respStatus
    */
-  private void checkoutMethod(FullHttpRequest request, HttpResponseStatus responseStatus)
+  private ResponseEntity processMethod(FullHttpRequest request, HttpResponseStatus respStatus,
+      ChannelHandlerContext ctx)
       throws BasicException {
     HttpMethod method = request.method();
+    ResponseEntity responseEntity = null;
     if (POST.equals(method)) {
-      checkoutContentType(getContentType(request), responseStatus);
+      responseEntity = processPost(request, respStatus);
     } else if (GET.equals(method)) {
-      throw new BasicException("This method is GET!! ");
+      responseEntity = processGet(request, respStatus, ctx);
     } else {
       throw new BasicException("This method is other!! ");
     }
+    return responseEntity;
+  }
+
+  private ResponseEntity processPost(FullHttpRequest request, HttpResponseStatus respStatus)
+      throws BasicException {
+    checkoutUrl(URL, request.uri(), respStatus);
+    checkoutContentType(getContentType(request), respStatus);
+    RequestEntity requestEntity = getContent(request, respStatus);
+    System.out.println(requestEntity.toString());
+
+    ResponseEntity responseEntity = new ResponseEntity("1.1.0",
+        "I am server,I accept the message :" + requestEntity.getContent());
+    responseEntity.setSuccess("success");
+    return responseEntity;
   }
 
   /**
@@ -135,13 +148,17 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
     }
   }
 
+  /**
+   * 获取请求中的数据
+   */
   private RequestEntity getContent(FullHttpRequest request, HttpResponseStatus respStatus)
       throws BasicException {
     // 请求的content部分的bytes
     byte[] reqBytes;
     RequestEntity requestEntity = null;
     String reqStr = "";
-    // 请求的content部分 ByteBuf
+
+    /**请求的content部分 ByteBuf.*/
     ByteBuf bufReq = request.content();
 
     if (bufReq.readableBytes() > 0) {
@@ -214,6 +231,14 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
 
   }
 
+  /***
+   * 处理get请求
+   * @param request
+   * @param respStatus
+   * @param ctx
+   * @return
+   * @throws BasicException
+   */
   private ResponseEntity processGet(FullHttpRequest request, HttpResponseStatus respStatus,
       ChannelHandlerContext ctx)
       throws BasicException {
@@ -262,11 +287,17 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
   }
 
 
+  /**
+   * 获取文件类型
+   */
   private static String getFileType(File file) {
     MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
     return mimeTypesMap.getContentType(file.getPath());
   }
 
+  /**
+   * 传输文件
+   */
   private void writeFileResponse(ChannelHandlerContext ctx, RandomAccessFile randomAccessFile,
       FullHttpResponse response, FullHttpRequest request) throws IOException {
     long fileLength = randomAccessFile.length();
@@ -314,6 +345,7 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
 
   @Override
   public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+    System.out.println(cause.getMessage());;
     logger.error("服务异常", cause);
     ctx.channel().close();
   }

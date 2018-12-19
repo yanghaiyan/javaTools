@@ -12,6 +12,7 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import netty.ssl.HttpsInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +22,7 @@ import org.slf4j.LoggerFactory;
 public class NettyServer {
 
   private Logger logger = LoggerFactory.getLogger(this.getClass());
-  private static NettyServerHandle handler = new NettyServerHandle();
+  //private static NettyServerHandle handler = new NettyServerHandle();
   private Thread thread = null;
 
   EventLoopGroup bossGroup = new NioEventLoopGroup();
@@ -62,7 +63,8 @@ public class NettyServer {
               .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
               .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
               .handler(new LoggingHandler(LogLevel.INFO))
-              .childHandler(new NettyServerInitializer(handler));
+              .childHandler(new HttpsInitializer());
+              //.childHandler(new NettyServerInitializer(handler));
 
           /*Start the Server*/
           ChannelFuture future = boot.bind(address1).sync();
@@ -70,6 +72,7 @@ public class NettyServer {
           // Wait until the server socket is closed.
           future.channel().closeFuture().sync();
         } catch (InterruptedException e) {
+          e.printStackTrace();
           logger.error("NettyServer start fail{" + addressInfo + "}");
         } finally {
           workerGroup.shutdownGracefully();
