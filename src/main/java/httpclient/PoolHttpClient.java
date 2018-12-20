@@ -29,7 +29,9 @@ import org.apache.http.util.EntityUtils;
 
 
 /**
-
+ * 连接池
+ *
+ * @author
  */
 public class PoolHttpClient {
 
@@ -105,6 +107,7 @@ public class PoolHttpClient {
 
     HttpClientBuilder builder = HttpClients.custom();
     httpClient = builder
+        /**  注入连接管理*/
         .setConnectionManager(this.gcm)
         .setDefaultRequestConfig(requestConfig)
         .build();
@@ -121,18 +124,15 @@ public class PoolHttpClient {
     return this.doGet(url, Collections.EMPTY_MAP, params);
   }
 
-  public String doGet(String url,
-      Map<String, String> headers,
-      Map<String, Object> params
-  ) {
+  public String doGet(String url, Map<String, String> headers, Map<String, Object> params) {
 
-    // *) 构建GET请求头
+    /** 构建GET请求头.*/
     String apiUrl = getUrlWithParams(url, params);
     HttpGet httpGet = new HttpGet(apiUrl);
     httpGet.setHeader("User-Agent",
-        "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36");
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.62 Safari/537.36");
 
-    // *) 设置header信息
+    /** 设置header信息.*/
     if (headers != null && headers.size() > 0) {
       for (Map.Entry<String, String> entry : headers.entrySet()) {
         httpGet.addHeader(entry.getKey(), entry.getValue());
@@ -162,6 +162,10 @@ public class PoolHttpClient {
     return handlerResp(httpPost);
   }
 
+
+  /**
+   * 处理响应
+   */
   private String handlerResp(HttpUriRequest request) {
     CloseableHttpResponse response = null;
     try {
@@ -174,7 +178,8 @@ public class PoolHttpClient {
       if (statusCode == HttpStatus.SC_OK) {
         HttpEntity entityRes = response.getEntity();
         if (entityRes != null) {
-          return EntityUtils.toString(entityRes, "UTF-8");
+          String content = EntityUtils.toString(entityRes, "UTF-8");
+          return content;
         }
       }
       return null;

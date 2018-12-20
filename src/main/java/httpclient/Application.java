@@ -10,14 +10,12 @@ import org.jsoup.select.Elements;
 import org.junit.Test;
 
 /**
- * @author: tangJ
- * @Date: 2018/9/27 10:01
- * @description:
+ * 测试案例
  */
 public class Application {
 
 
-  static String getUrl = "https://www.google.com";
+  static String getUrl = "https://www.baidu.com";
 
   static String postUrl = "https://10.0.90.45:8099/post";
 
@@ -28,8 +26,7 @@ public class Application {
   @Test
   public void testGet() {
     PoolHttpClient httpClient = new PoolHttpClient();
-    String resp = httpClient.doGet(getUrl);
-//        System.out.println(resp);
+    String resp = httpClient.doGet(getUrl);;
     Document document = Jsoup.parse(resp);
     Elements links = document.getElementsByClass("content__list--item");
     for (Element element : links) {
@@ -55,9 +52,9 @@ public class Application {
     String url = ipUrlStr + myIp;
     String result = httpClient.doGet(url);
     JSONObject jsonObject = JSON.parseObject(result);
-    System.out.println("国家： " + jsonObject.get("country"));
-    System.out.println("省份： " + jsonObject.get("region"));
-    System.out.println("城市：" + jsonObject.get("city"));
+    System.out.println("国家： " + jsonObject.getJSONObject("data").get("country"));
+    System.out.println("省份： " + jsonObject.getJSONObject("data").get("region"));
+    System.out.println("城市：" + jsonObject.getJSONObject("data").get("city"));
 
   }
 }

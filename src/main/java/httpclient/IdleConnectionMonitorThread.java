@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.http.conn.HttpClientConnectionManager;
 
 /**
- * @description:
+ * 连接池管理线程
  */
 public class IdleConnectionMonitorThread extends Thread {
 

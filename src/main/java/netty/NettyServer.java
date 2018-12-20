@@ -60,7 +60,9 @@ public class NettyServer {
           ServerBootstrap boot = new ServerBootstrap();
           boot.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
               .option(ChannelOption.SO_BACKLOG, 100)
+              /**boss ÄÚ´æ³Ø.*/
               .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
+              /** work ÄÚ´æ³Ø.*/
               .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
               .handler(new LoggingHandler(LogLevel.INFO))
               .childHandler(new HttpsInitializer());
