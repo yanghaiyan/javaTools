@@ -2,6 +2,9 @@ package application;
 
 import netty.NettyServer;
 
+/**
+ * netty server
+ */
 public class NettyApplication {
 
   public static void main(String[] args)  {

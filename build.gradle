@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'junit', name: 'junit', version: '4.12'
     compile group: 'org.jsoup', name: 'jsoup', version: '1.11.2'
     compile group: 'io.netty', name: 'netty-all', version: '4.1.28.Final'
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
@@ -30,4 +30,6 @@ dependencies {
     compile "com.alibaba:fastjson:1.1.22"
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
     compile group: 'com.google.guava', name: 'guava', version: '27.0-jre'
+    compile "org.apache.poi:poi:3.12"
+    compile "org.apache.poi:poi-ooxml:3.12"
 }

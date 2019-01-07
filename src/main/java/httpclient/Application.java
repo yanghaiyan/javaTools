@@ -26,7 +26,8 @@ public class Application {
   @Test
   public void testGet() {
     PoolHttpClient httpClient = new PoolHttpClient();
-    String resp = httpClient.doGet(getUrl);;
+    String resp = httpClient.doGet(getUrl);
+    ;
     Document document = Jsoup.parse(resp);
     Elements links = document.getElementsByClass("content__list--item");
     for (Element element : links) {

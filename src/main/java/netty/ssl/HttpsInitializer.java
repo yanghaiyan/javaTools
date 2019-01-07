@@ -9,6 +9,9 @@ import io.netty.handler.ssl.SslHandler;
 import javax.net.ssl.SSLEngine;
 import netty.NettyServerHandle;
 
+/**
+ *  π”√https
+ */
 public class HttpsInitializer extends ChannelInitializer<SocketChannel> {
 
   @Override

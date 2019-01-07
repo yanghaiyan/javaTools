@@ -1,17 +1,13 @@
 package helper;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.security.InvalidAlgorithmParameterException;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertPath;
 import java.security.cert.CertPathValidator;
 import java.security.cert.CertPathValidatorException;
 import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.PKIXCertPathValidatorResult;
 import java.security.cert.PKIXParameters;
@@ -74,15 +70,9 @@ public class VerifyCerChainHelper {
         System.out.println("success");
         System.out.println(result);
       }
-    } catch (CertificateException e) {
-      e.printStackTrace();
     } catch (CertPathValidatorException cpve) {
       System.out.println("Validation failure, cert[" + cpve.getIndex() + "] :" + cpve.getMessage());
-    } catch (InvalidAlgorithmParameterException e) {
-      e.printStackTrace();
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-    } catch (NoSuchAlgorithmException e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
 

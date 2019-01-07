@@ -44,6 +44,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * netty ²Ù×÷handle
  * @author YHY
  */
 public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpRequest> {

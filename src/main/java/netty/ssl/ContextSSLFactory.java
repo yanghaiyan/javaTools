@@ -15,6 +15,9 @@ import javax.net.ssl.TrustManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * π§≥ß¿‡
+ */
 public class ContextSSLFactory {
 
   private Logger logger = LoggerFactory.getLogger(this.getClass());
