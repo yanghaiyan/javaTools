@@ -1,4 +1,4 @@
-package netty;
+package netty.handler;
 
 import static io.netty.buffer.Unpooled.wrappedBuffer;
 import static io.netty.handler.codec.http.HttpHeaderNames.CONNECTION;
