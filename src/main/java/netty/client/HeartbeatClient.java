@@ -51,6 +51,10 @@ public class HeartbeatClient {
 
   /**
    * 连接服务端
+   *  <P>
+   *    它负责客户端和服务器的 TCP 连接的建立, 并且当 TCP 连接失败时,
+   *    doConnect 会 通过 "channel().eventLoop().schedule" 来延时10s 后尝试重新连接.
+   *  </P>
    */
   public void doConncet() {
     if (channel != null && channel.isActive()) {
