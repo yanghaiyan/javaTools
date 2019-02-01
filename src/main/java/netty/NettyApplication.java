@@ -1,6 +1,4 @@
-package application;
-
-import netty.NettyServer;
+package netty;
 
 /**
  * netty server
