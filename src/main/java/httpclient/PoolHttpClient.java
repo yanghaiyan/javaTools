@@ -36,7 +36,7 @@ import org.apache.http.util.EntityUtils;
 public class PoolHttpClient {
 
   // 池中最大连接数
-  private static final int DEFAULT_POOL_MAX_TOTAL = 50;
+  private static final int DEFAULT_POOL_MAX_TOTAL = 300;
   // 最大路由配置数量
   private static final int DEFAULT_POOL_MAX_PER_ROUTE = 200;
 

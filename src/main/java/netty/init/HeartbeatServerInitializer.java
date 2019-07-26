@@ -11,11 +11,11 @@ import netty.handler.HeartbeatServerHandle;
 
 /**
  *
- * ·þÎñ¶Ë
+ * ï¿½ï¿½ï¿½ï¿½ï¿½
  */
 public class HeartbeatServerInitializer extends ChannelInitializer<SocketChannel> {
 
-  /* ¼ì²âchanelÊÇ·ñ½ÓÊÜ¹ýÐÄÌøÊý¾ÝÊ±¼ä¼ä¸ô£¨µ¥Î»Ãë£©*/
+  /* ï¿½ï¿½ï¿½chanelï¿½Ç·ï¿½ï¿½ï¿½Ü¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ë£©*/
   private static final int READ_WAIT_SECONDS = 10;
 
   ChannelInboundHandlerAdapter handlerAdapter = null;
@@ -29,7 +29,7 @@ public class HeartbeatServerInitializer extends ChannelInitializer<SocketChannel
 
     ChannelPipeline pipeline = ch.pipeline();
 
-    //¼àÌý¶Á²Ù×÷£¬¶Á³¬Ê±Ê±¼ä5Ãë£¬³¬¹ý5Ãë¹Ø±Õchannel
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±Ê±ï¿½ï¿½5ï¿½ë£¬ï¿½ï¿½ï¿½ï¿½5ï¿½ï¿½Ø±ï¿½quartz
     pipeline.addLast("ping", new IdleStateHandler(READ_WAIT_SECONDS, 0, 0, TimeUnit.SECONDS));
     pipeline.addLast("decoder", new StringDecoder());
     pipeline.addLast("encoder", new StringDecoder());

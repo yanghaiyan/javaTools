@@ -1,7 +1,6 @@
 package demo;
 
 import java.lang.reflect.Field;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author yhy
@@ -9,7 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class IntegerDemo {
 
   /**
-   * 交换两个integer类型中的值
+   *
    */
   public static void swap(Integer num1, Integer num2) {
 
@@ -28,11 +27,10 @@ public class IntegerDemo {
 
   public static void main(String[] args) {
 
-    ReentrantLock lock = new ReentrantLock();
-    lock.lock();
     Integer a = 1;
     Integer b = 2;
     swap(a, b);
     System.out.println("a:" + a + ",b:" + b);
+
   }
 }

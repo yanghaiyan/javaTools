@@ -66,7 +66,7 @@ public class NettyServer {
               .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
               .handler(new LoggingHandler(LogLevel.INFO))
               .childHandler(new HttpsInitializer());
-              //.childHandler(new NettyServerInitializer(handler));
+          //.childHandler(new NettyServerInitializer(handler));
 
           /*Start the Server*/
           ChannelFuture future = boot.bind(address1).sync();

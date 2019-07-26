@@ -17,7 +17,7 @@ jar {
 repositories {
     //mavenLocal()
     maven { url "http://10.0.109.63:8081/nexus/content/repositories/public/" }
-    maven { url "http://10.0.109.63:8081/nexus/content/repositories/snapshots/"}
+    maven { url "http://10.0.109.63:8081/nexus/content/repositories/snapshots/" }
     maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
 }
 
@@ -32,4 +32,5 @@ dependencies {
     compile group: 'com.google.guava', name: 'guava', version: '27.0-jre'
     compile "org.apache.poi:poi:3.12"
     compile "org.apache.poi:poi-ooxml:3.12"
+    implementation 'org.quartz-scheduler:quartz:2.3.0'
 }
