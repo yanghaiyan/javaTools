@@ -50,10 +50,7 @@ public class HeartbeatClient {
   }
 
   /**
-   * ���ӷ����
    *  <P>
-   *    ������ͻ��˺ͷ������� TCP ���ӵĽ���, ���ҵ� TCP ����ʧ��ʱ,
-   *    doConnect �� ͨ�� "quartz().eventLoop().schedule" ����ʱ10s ������������.
    *  </P>
    */
   public void doConncet() {

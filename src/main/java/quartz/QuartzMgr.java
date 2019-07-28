@@ -20,11 +20,11 @@ public class QuartzMgr {
   private static final Logger logger = LoggerFactory.getLogger(QuartzMgr.class);
 
   private static Scheduler scheduler;
-  // ´æ·ÅJobKey
+  // å­˜æ”¾JobKey
 
   private static ConcurrentHashMap<String, JobKey> jobs = new ConcurrentHashMap<>();
 
-  // ´æ·ÅTriggerKey
+  // å­˜æ”¾TriggerKey
   private static ConcurrentHashMap<String, TriggerKey> triggers = new ConcurrentHashMap<>();
 
   static {
@@ -36,7 +36,7 @@ public class QuartzMgr {
     }
   }
 
-  // ¿ªÆôscheduler
+  // å¼€å¯scheduler
   public static void start() throws SchedulerException {
     try {
       if (!isStarted()) {
@@ -49,7 +49,7 @@ public class QuartzMgr {
     }
   }
 
-  // ¿ªÆôscheduler
+  // å¼€å¯scheduler
   public static void shutdown() throws SchedulerException {
     try {
       scheduler.shutdown();
@@ -61,7 +61,7 @@ public class QuartzMgr {
 
 
   /**
-   * ÅĞ¶ÏSchedulerÊÇ·ñÒÑ¾­Æô¶¯
+   * åˆ¤æ–­Scheduleræ˜¯å¦å·²ç»å¯åŠ¨
    */
   public static boolean isStarted() throws SchedulerException {
     try {
@@ -72,7 +72,7 @@ public class QuartzMgr {
     }
   }
 
-  // Í£Ö¹ÈÎÎñ
+  // åœæ­¢ä»»åŠ¡
   public static void stop(String jobName) throws SchedulerException {
     TriggerKey key = triggers.get(jobName);
     try {
@@ -100,11 +100,11 @@ public class QuartzMgr {
   }
 
   /**
-   * ×¢²áÈÎÎñ
+   * æ³¨å†Œä»»åŠ¡
    *
-   * @param jobClazz ÈÎÎñÀà
-   * @param jobName ÈÎÎñÃû
-   * @param period ¸üĞÂÖÜÆÚ µ¥Î»Îª·ÖÖÓ
+   * @param jobClazz ä»»åŠ¡ç±»
+   * @param jobName ä»»åŠ¡å
+   * @param period æ›´æ–°å‘¨æœŸ å•ä½ä¸ºåˆ†é’Ÿ
    */
   public static void createScheduleJob(Class<? extends Job> jobClazz, String jobName, int period)
       throws SchedulerException {
@@ -123,8 +123,8 @@ public class QuartzMgr {
         .withSchedule(SimpleScheduleBuilder.simpleSchedule()
             .withIntervalInMinutes(period)
             .repeatForever()
-            // Èç¹û±»ÅĞ¶ÏÎªmisfireÁË±¾´ÎÈÎÎñ²»Ö´ĞĞ µÈ´ıÏÂÒ»¸öÖÜÆÚ
-            // misfireThresholdÎªÄ¬ÈÏÅäÖÃÒ»·ÖÖÓ³¬¹ıÔò±»ÅĞ¶ÏÎªmisfire
+            // å¦‚æœè¢«åˆ¤æ–­ä¸ºmisfireäº†æœ¬æ¬¡ä»»åŠ¡ä¸æ‰§è¡Œ ç­‰å¾…ä¸‹ä¸€ä¸ªå‘¨æœŸ
+            // misfireThresholdä¸ºé»˜è®¤é…ç½®ä¸€åˆ†é’Ÿè¶…è¿‡åˆ™è¢«åˆ¤æ–­ä¸ºmisfire
             .withMisfireHandlingInstructionNextWithRemainingCount()
         )
         .build();

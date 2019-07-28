@@ -11,11 +11,10 @@ import netty.handler.HeartbeatServerHandle;
 
 /**
  *
- * �����
+ *
  */
 public class HeartbeatServerInitializer extends ChannelInitializer<SocketChannel> {
 
-  /* ���chanel�Ƿ���ܹ���������ʱ��������λ�룩*/
   private static final int READ_WAIT_SECONDS = 10;
 
   ChannelInboundHandlerAdapter handlerAdapter = null;
@@ -29,7 +28,6 @@ public class HeartbeatServerInitializer extends ChannelInitializer<SocketChannel
 
     ChannelPipeline pipeline = ch.pipeline();
 
-    //����������������ʱʱ��5�룬����5��ر�quartz
     pipeline.addLast("ping", new IdleStateHandler(READ_WAIT_SECONDS, 0, 0, TimeUnit.SECONDS));
     pipeline.addLast("decoder", new StringDecoder());
     pipeline.addLast("encoder", new StringDecoder());
