@@ -2,6 +2,7 @@ package demo;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -17,10 +18,12 @@ public class RanDomUtil {
     Runnable test = new Runnable() {
       @Override
       public void run() {
-        List<Integer> rands;
-        int[] rand = ThreadLocalRandom.current().ints(0, 10).distinct().limit(10).toArray();
-        rands = Arrays.stream(rand).boxed().collect(Collectors.toList());
-        System.out.println(rands);
+        UUID uuid = new UUID(ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong());
+//        List<Integer> rands;
+//        int[] rand = ThreadLocalRandom.current().ints(0, 10).distinct().limit(10).toArray();
+//        rands = Arrays.stream(rand).boxed().collect(Collectors.toList());
+//        System.out.println(rands);
+        System.out.println(uuid);
       }
     };
 

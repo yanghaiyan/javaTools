@@ -14,7 +14,6 @@ import org.junit.Test;
  */
 public class Application {
 
-
   static String getUrl = "https://www.baidu.com";
 
   static String postUrl = "https://10.0.90.45:8099/post";
