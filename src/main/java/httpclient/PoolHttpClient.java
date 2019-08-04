@@ -87,10 +87,13 @@ public class PoolHttpClient {
     this.connectRequestTimeout = connectRequestTimeout;
     this.socketTimeout = socketTimeout;
 
-    Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory>create()
-        .register("http", PlainConnectionSocketFactory.getSocketFactory())
-        .register("https", ClientSslFactory.getInstance().getSslFac())
-        .build();
+    initHttpClient();
+  }
+
+
+
+  private void initHttpClient(){
+    Registry<ConnectionSocketFactory> registry = initRegistry();
 
     this.gcm = new PoolingHttpClientConnectionManager(registry);
     this.gcm.setMaxTotal(maxTotal);
@@ -116,6 +119,12 @@ public class PoolHttpClient {
     idleThread.start();
   }
 
+  private Registry<ConnectionSocketFactory> initRegistry(){
+    return  RegistryBuilder.<ConnectionSocketFactory>create()
+        .register("http", PlainConnectionSocketFactory.getSocketFactory())
+        .register("https", ClientSslFactory.getInstance().getSslFac())
+        .build();
+  }
   public String doGet(String url) {
     return this.doGet(url, Collections.EMPTY_MAP, Collections.EMPTY_MAP);
   }

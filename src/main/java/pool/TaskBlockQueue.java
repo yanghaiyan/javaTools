@@ -5,9 +5,10 @@ import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import jdk.nashorn.internal.runtime.linker.LinkerCallSite;
+import java.util.concurrent.TimeUnit;
 
 public class TaskBlockQueue {
+
   public static BlockingQueue<Runnable> blockingQueue = null;
 
   private TaskBlockQueue() {
@@ -15,6 +16,7 @@ public class TaskBlockQueue {
   }
 
   private static class Inner {
+
     static TaskBlockQueue instance = new TaskBlockQueue();
   }
 
@@ -25,6 +27,7 @@ public class TaskBlockQueue {
 
   public void put(Runnable runnable) throws Exception {
     blockingQueue.put(runnable);
+    blockingQueue.poll(100,TimeUnit.SECONDS);
   }
 
   public Runnable take() throws Exception {
@@ -34,10 +37,10 @@ public class TaskBlockQueue {
   public static void main(String[] args) throws InterruptedException {
     BlockingQueue<Integer> blockingQueue = new LinkedBlockingQueue<>(100);
 
-       blockingQueue.put(11);
+    blockingQueue.put(11);
 
     List<Integer> list = new ArrayList<>(10);
-    blockingQueue.drainTo(list,10);
+    blockingQueue.drainTo(list, 10);
     System.out.println(list.size());
   }
 }
