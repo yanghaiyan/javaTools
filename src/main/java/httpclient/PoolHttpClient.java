@@ -90,8 +90,6 @@ public class PoolHttpClient {
     initHttpClient();
   }
 
-
-
   private void initHttpClient(){
     Registry<ConnectionSocketFactory> registry = initRegistry();
 
@@ -125,6 +123,7 @@ public class PoolHttpClient {
         .register("https", ClientSslFactory.getInstance().getSslFac())
         .build();
   }
+
   public String doGet(String url) {
     return this.doGet(url, Collections.EMPTY_MAP, Collections.EMPTY_MAP);
   }

@@ -21,28 +21,25 @@ public class ThreadPoolMgr {
   private static long timeOut = 2 * 1000;
 
   private static BlockingQueue queue = new ArrayBlockingQueue(500);
-
   private static CommonThreadFactory threadFactory = new CommonThreadFactory(threadName);
-
   private static CommonThreadPool threadPool = null;
 
-  private void init() {
-    threadPool = new CommonThreadPool(coreSize, maxiSize, queue, threadFactory,
-        new ThreadPoolExecutor.CallerRunsPolicy());
+  public static ThreadPoolMgr getInstance() {
+    return Inner.mgr;
+  }
 
+  private static class Inner {
+    static ThreadPoolMgr mgr = new ThreadPoolMgr();
   }
 
   private ThreadPoolMgr() {
     init();
   }
 
-  private static class Inner {
+  private void init() {
+    threadPool = new CommonThreadPool(coreSize, maxiSize, queue, threadFactory,
+        new ThreadPoolExecutor.CallerRunsPolicy());
 
-    static ThreadPoolMgr mgr = new ThreadPoolMgr();
-  }
-
-  public static ThreadPoolMgr getInstance() {
-    return Inner.mgr;
   }
 
   public ExecutorService getPool() {
@@ -74,8 +71,6 @@ public class ThreadPoolMgr {
       }
     };
     startThread.start();
-
-
   }
 
   public void stop() throws Exception {

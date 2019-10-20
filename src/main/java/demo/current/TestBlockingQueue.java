@@ -9,7 +9,6 @@ public class TestBlockingQueue {
   /**
    * 生产和消费业务操作
    *
-   * @author tang
    *
    */
   protected class WorkDesk {
@@ -31,7 +30,6 @@ public class TestBlockingQueue {
   /**
    * 生产者类
    *
-   * @author tang
    *
    */
   class Producer implements Runnable {
@@ -90,7 +88,6 @@ public class TestBlockingQueue {
   public static void main(String args[]) throws InterruptedException {
     TestBlockingQueue testQueue = new TestBlockingQueue();
     WorkDesk workDesk = testQueue.new WorkDesk();
-
     ExecutorService service = Executors.newFixedThreadPool(6);
     //四个生产者线程
     for (int i=1;i<=4;++i) {
@@ -104,6 +101,7 @@ public class TestBlockingQueue {
     service.submit(consumer1);
     service.submit(consumer2);
     service.shutdown();
+
   }
 
 }

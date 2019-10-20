@@ -14,8 +14,10 @@ public class CommonThreadPool extends ThreadPoolExecutor {
   // 记录开始时间
   private final ThreadLocal<Long> startTimeLocal = new ThreadLocal<>();
 
-  public CommonThreadPool(int corePoolSize, int maximumPoolSize, BlockingQueue<Runnable> workQueue, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
-    super(corePoolSize, maximumPoolSize, 15, TimeUnit.SECONDS, workQueue, threadFactory, handler);
+  public CommonThreadPool(int corePoolSize, int maximumPoolSize, BlockingQueue<Runnable> workQueue,
+      ThreadFactory threadFactory, RejectedExecutionHandler handler) {
+    super(corePoolSize, maximumPoolSize, 15, TimeUnit.SECONDS,
+                                         workQueue, threadFactory, handler);
   }
   public CommonThreadPool(int corePoolSize, int maximumPoolSize, long keepAliveTime,
       TimeUnit unit,

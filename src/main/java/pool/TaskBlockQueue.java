@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 public class TaskBlockQueue {
 
@@ -27,7 +26,6 @@ public class TaskBlockQueue {
 
   public void put(Runnable runnable) throws Exception {
     blockingQueue.put(runnable);
-    blockingQueue.poll(100,TimeUnit.SECONDS);
   }
 
   public Runnable take() throws Exception {

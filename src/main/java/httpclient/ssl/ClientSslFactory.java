@@ -53,16 +53,17 @@ public class ClientSslFactory {
     });
 
     /*对服务器端证书进行校验
-     * .loadTrustMaterial(new File("D:\\truststore.jks"), "123456".toCharArray(), new TrustSelfSignedStrategy())
+     * .loadTrustMaterial(new File("D:\\truststore.jks"),
+      *                    "123456".toCharArray(), new TrustSelfSignedStrategy())
      *  发送客户端证书，服务端校验时会使用到
      * .loadKeyMaterial(keyStore, "123456".toCharArray())
      */
 
     sslConnectionSocketFactory = new SSLConnectionSocketFactory(builder.build(),
-        new String[]{"SSLv2Hello", "SSLv3", "TLSv1", "TLSv1.2"}, null,
+        new String[]{"SSLv2Hello", "SSLv3", "TLSv1", "TLSv1.2"},
+        null,
         NoopHostnameVerifier.INSTANCE);
   }
-
   /**
    * 获取ssl环境
    */

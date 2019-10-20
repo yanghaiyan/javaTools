@@ -12,7 +12,8 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import netty.ssl.HttpsInitializer;
+import netty.handler.HeartbeatServerHandle;
+import netty.init.HeartbeatServerInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,8 +66,8 @@ public class NettyServer {
               /** work ÄÚ´æ³Ø.*/
               .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
               .handler(new LoggingHandler(LogLevel.INFO))
-              .childHandler(new HttpsInitializer());
-          //.childHandler(new NettyServerInitializer(handler));
+             // .childHandler(new HttpsInitializer());
+             .childHandler(new HeartbeatServerInitializer(new HeartbeatServerHandle()));
 
           /*Start the Server*/
           ChannelFuture future = boot.bind(address1).sync();
