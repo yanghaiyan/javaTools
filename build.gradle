@@ -35,4 +35,7 @@ dependencies {
     implementation 'org.quartz-scheduler:quartz:2.3.0'
     compile group: 'net.sf.ehcache', name: 'ehcache', version: '2.10.6'
     compile group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.11.1'
+    // https://mvnrepository.com/artifact/com.netflix.hystrix/hystrix-core
+    compile group: 'com.netflix.hystrix', name: 'hystrix-core', version: '1.5.18'
+
 }
