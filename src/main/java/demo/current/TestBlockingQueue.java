@@ -7,7 +7,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class TestBlockingQueue {
   /**
-   * Éú²úºÍÏû·ÑÒµÎñ²Ù×÷
+   * ç”Ÿäº§å’Œæ¶ˆè´¹ä¸šåŠ¡æ“ä½œ
    *
    *
    */
@@ -17,7 +17,7 @@ public class TestBlockingQueue {
 
     public void work() throws InterruptedException {
       Thread.sleep(1000);
-      desk.put("¶Ë³öÒ»µÀ²Ë");
+      desk.put("ç«¯å‡ºä¸€é“èœ");
     }
 
     public String eat() throws InterruptedException {
@@ -28,7 +28,7 @@ public class TestBlockingQueue {
   }
 
   /**
-   * Éú²úÕßÀà
+   * ç”Ÿäº§è€…ç±»
    *
    *
    */
@@ -48,7 +48,7 @@ public class TestBlockingQueue {
         for (;;) {
 
           workDesk.work();
-          System.out.println(producerName + "¶Ë³öÒ»µÀ²Ë" +",Data:"+System.currentTimeMillis());
+          System.out.println(producerName + "ç«¯å‡ºä¸€é“èœ" +",Data:"+System.currentTimeMillis());
 
         }
       } catch (Exception e) {
@@ -58,7 +58,7 @@ public class TestBlockingQueue {
   }
 
   /**
-   * Ïû·ÑÕßÀà
+   * æ¶ˆè´¹è€…ç±»
    *
    *
    */
@@ -76,7 +76,7 @@ public class TestBlockingQueue {
       try {
         for (;;) {
           workDesk.eat();
-          System.out.println(consumerName + "¶Ë×ßÁËÒ»¸ö²Ë"+",Data:"+System.currentTimeMillis());
+          System.out.println(consumerName + "ç«¯èµ°äº†ä¸€ä¸ªèœ"+",Data:"+System.currentTimeMillis());
 
         }
       } catch (Exception e) {
@@ -89,14 +89,14 @@ public class TestBlockingQueue {
     TestBlockingQueue testQueue = new TestBlockingQueue();
     WorkDesk workDesk = testQueue.new WorkDesk();
     ExecutorService service = Executors.newFixedThreadPool(6);
-    //ËÄ¸öÉú²úÕßÏß³Ì
+    //å››ä¸ªç”Ÿäº§è€…çº¿ç¨‹
     for (int i=1;i<=4;++i) {
-      service.submit(testQueue.new Producer("Ê³ÌÃ´°¿Ú-"+ i+"-", workDesk));
+      service.submit(testQueue.new Producer("é£Ÿå ‚çª—å£-"+ i+"-", workDesk));
     }
 
-    //Á½¸öÏû·ÑÕßÏß³Ì
-    Consumer consumer1 = testQueue.new Consumer("¹Ë¿Í-1-", workDesk);
-    Consumer consumer2 = testQueue.new Consumer("¹Ë¿Í-2-", workDesk);
+    //ä¸¤ä¸ªæ¶ˆè´¹è€…çº¿ç¨‹
+    Consumer consumer1 = testQueue.new Consumer("é¡¾å®¢-1-", workDesk);
+    Consumer consumer2 = testQueue.new Consumer("é¡¾å®¢-2-", workDesk);
 
     service.submit(consumer1);
     service.submit(consumer2);

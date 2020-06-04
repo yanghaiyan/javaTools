@@ -10,7 +10,7 @@ import javax.net.ssl.SSLEngine;
 import netty.handler.NettyServerHandle;
 
 /**
- * Ê¹ÓÃhttps
+ * ä½¿ç”¨https
  */
 public class HttpsInitializer extends ChannelInitializer<SocketChannel> {
 
@@ -18,15 +18,15 @@ public class HttpsInitializer extends ChannelInitializer<SocketChannel> {
   protected void initChannel(SocketChannel ch) throws Exception {
     ChannelPipeline p = ch.pipeline();
     // decoder
-    // ssl »·¾³
+    // ssl ç¯å¢ƒ
     SSLEngine sslEngine = ContextSSLFactory.getInstance().getSslEngine();
     p.addLast("ssl", new SslHandler(sslEngine));
 
     p.addLast("codec", new HttpServerCodec());
     // p.addLast("decoder", new HttpRequestDecoder());
-    // Ê¹ÓÃHttpObjectAggregator½«httpÇëÇóºÏ²¢³ÉÒ»¸öFullHttpRequest £¬
-    // °üÀ¨HttpRequest,HttpContent,HttpLastContent
-    // ½â¾ö²ğ°üºÍ·Ö°üµÄÎÊÌâ
+    // ä½¿ç”¨HttpObjectAggregatorå°†httpè¯·æ±‚åˆå¹¶æˆä¸€ä¸ªFullHttpRequest ï¼Œ
+    // åŒ…æ‹¬HttpRequest,HttpContent,HttpLastContent
+    // è§£å†³æ‹†åŒ…å’Œåˆ†åŒ…çš„é—®é¢˜
     p.addLast("aggegator", new HttpObjectAggregator(1024 * 1024 * 64));
     // encoder
     //p.addLast("encoder", new HttpResponseEncoder());

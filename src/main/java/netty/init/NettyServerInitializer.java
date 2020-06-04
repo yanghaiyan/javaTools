@@ -10,7 +10,7 @@ import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.stream.ChunkedWriteHandler;
 
 /**
- * httpĞ­Òé
+ * httpåè®®
  */
 public class NettyServerInitializer extends ChannelInitializer<SocketChannel> {
 
@@ -26,9 +26,9 @@ public class NettyServerInitializer extends ChannelInitializer<SocketChannel> {
     ChannelPipeline p = ch.pipeline();
     // decoder
     p.addLast("decoder", new HttpRequestDecoder());
-    // Ê¹ÓÃHttpObjectAggregator½«httpÇëÇóºÏ²¢³ÉÒ»¸öFullHttpRequest £¬
-    // °üÀ¨HttpRequest,HttpContent,HttpLastContent
-    // ½â¾ö²ğ°üºÍ·Ö°üµÄÎÊÌâ
+    // ä½¿ç”¨HttpObjectAggregatorå°†httpè¯·æ±‚åˆå¹¶æˆä¸€ä¸ªFullHttpRequest ï¼Œ
+    // åŒ…æ‹¬HttpRequest,HttpContent,HttpLastContent
+    // è§£å†³æ‹†åŒ…å’Œåˆ†åŒ…çš„é—®é¢˜
     p.addLast("aggegator", new HttpObjectAggregator(1024 * 1024 * 64));
     // encoder
     p.addLast("encoder", new HttpResponseEncoder());

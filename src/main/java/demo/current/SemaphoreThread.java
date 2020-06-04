@@ -13,7 +13,7 @@ public class SemaphoreThread {
   }
 
   /**
-   * ÒøĞĞ´æÇ®Àà
+   * é“¶è¡Œå­˜é’±ç±»
    */
   class Bank {
 
@@ -29,7 +29,7 @@ public class SemaphoreThread {
   }
 
   /**
-   * Ïß³ÌÖ´ĞĞÀà£¬Ã¿´Î´æ10¿éÇ®
+   * çº¿ç¨‹æ‰§è¡Œç±»ï¼Œæ¯æ¬¡å­˜10å—é’±
    */
   class NewThread implements Runnable {
 
@@ -45,16 +45,16 @@ public class SemaphoreThread {
     public void run() {
       int tempCustomer = customer++;
       if (semaphore.availablePermits() > 0) {
-        System.out.println("¿Í»§" + tempCustomer + "Æô¶¯£¬½øÈëÒøĞĞ,ÓĞÎ»ÖÃÁ¢¼´È¥´æÇ®");
+        System.out.println("å®¢æˆ·" + tempCustomer + "å¯åŠ¨ï¼Œè¿›å…¥é“¶è¡Œ,æœ‰ä½ç½®ç«‹å³å»å­˜é’±");
       } else {
-        System.out.println("¿Í»§" + tempCustomer + "Æô¶¯£¬½øÈëÒøĞĞ,ÎŞÎ»ÖÃ£¬È¥ÅÅ¶ÓµÈ´ıµÈ´ı");
+        System.out.println("å®¢æˆ·" + tempCustomer + "å¯åŠ¨ï¼Œè¿›å…¥é“¶è¡Œ,æ— ä½ç½®ï¼Œå»æ’é˜Ÿç­‰å¾…ç­‰å¾…");
       }
       try {
         semaphore.acquire();
         bank.save(10);
-        System.out.println(tempCustomer + "ÒøĞĞÓà¶îÎª£º" + bank.getAccount());
+        System.out.println(tempCustomer + "é“¶è¡Œä½™é¢ä¸ºï¼š" + bank.getAccount());
         Thread.sleep(1000);
-        System.out.println("¿Í»§" + tempCustomer + "´æÇ®Íê±Ï£¬Àë¿ªÒøĞĞ");
+        System.out.println("å®¢æˆ·" + tempCustomer + "å­˜é’±å®Œæ¯•ï¼Œç¦»å¼€é“¶è¡Œ");
         semaphore.release();
       } catch (InterruptedException e) {
         e.printStackTrace();
@@ -65,26 +65,26 @@ public class SemaphoreThread {
   }
 
   /**
-   * ½¨Á¢Ïß³Ì£¬µ÷ÓÃÄÚ²¿Àà£¬¿ªÊ¼´æÇ®
+   * å»ºç«‹çº¿ç¨‹ï¼Œè°ƒç”¨å†…éƒ¨ç±»ï¼Œå¼€å§‹å­˜é’±
    */
   public void useThread() {
     Bank bank = new Bank();
-    // ¶¨Òå2¸öĞÂºÅÁ¿
+    // å®šä¹‰2ä¸ªæ–°å·é‡
     Semaphore semaphore = new Semaphore(2);
-    // ½¨Á¢Ò»¸ö»º´æÏß³Ì³Ø
+    // å»ºç«‹ä¸€ä¸ªç¼“å­˜çº¿ç¨‹æ± 
     ExecutorService es = Executors.newCachedThreadPool();
-    // ½¨Á¢10¸öÏß³Ì
+    // å»ºç«‹10ä¸ªçº¿ç¨‹
     for (int i = 0; i < 10; i++) {
-      // Ö´ĞĞÒ»¸öÏß³Ì
+      // æ‰§è¡Œä¸€ä¸ªçº¿ç¨‹
       es.submit(new Thread(new NewThread(bank, semaphore)));
     }
-    // ¹Ø±ÕÏß³Ì³Ø
+    // å…³é—­çº¿ç¨‹æ± 
     es.shutdown();
 
-    // ´ÓĞÅºÅÁ¿ÖĞ»ñÈ¡Á½¸öĞí¿É£¬²¢ÇÒÔÚ»ñµÃĞí¿ÉÖ®Ç°£¬Ò»Ö±½«Ïß³Ì×èÈû
+    // ä»ä¿¡å·é‡ä¸­è·å–ä¸¤ä¸ªè®¸å¯ï¼Œå¹¶ä¸”åœ¨è·å¾—è®¸å¯ä¹‹å‰ï¼Œä¸€ç›´å°†çº¿ç¨‹é˜»å¡
     semaphore.acquireUninterruptibly(2);
-    System.out.println("µ½µãÁË£¬¹¤×÷ÈËÔ±Òª³Ô·¹ÁË");
-    // ÊÍ·ÅÁ½¸öĞí¿É£¬²¢½«Æä·µ»Ø¸øĞÅºÅÁ¿
+    System.out.println("åˆ°ç‚¹äº†ï¼Œå·¥ä½œäººå‘˜è¦åƒé¥­äº†");
+    // é‡Šæ”¾ä¸¤ä¸ªè®¸å¯ï¼Œå¹¶å°†å…¶è¿”å›ç»™ä¿¡å·é‡
     semaphore.release(2);
   }
 

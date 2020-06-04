@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 public class CommonThreadPool extends ThreadPoolExecutor {
 
   private Logger logger = LoggerFactory.getLogger(this.getClass());
-  // ¼ÇÂ¼¿ªÊ¼Ê±¼ä
+  // è®°å½•å¼€å§‹æ—¶é—´
   private final ThreadLocal<Long> startTimeLocal = new ThreadLocal<>();
 
   public CommonThreadPool(int corePoolSize, int maximumPoolSize, BlockingQueue<Runnable> workQueue,

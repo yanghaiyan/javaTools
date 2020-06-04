@@ -13,19 +13,19 @@ public class CommonThreadUser extends HystrixCommand<String> {
 
   protected CommonThreadUser(String userName) {
     super(Setter.withGroupKey(
-        //·şÎñ·Ö×é
+        //æœåŠ¡åˆ†ç»„
         HystrixCommandGroupKey.Factory.asKey("UserGroup"))
-        //Ïß³Ì·Ö×é
+        //çº¿ç¨‹åˆ†ç»„
         .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey("UserPool"))
 
-        //Ïß³Ì³ØÅäÖÃ
+        //çº¿ç¨‹æ± é…ç½®
         .andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter()
             .withCoreSize(10)
             .withKeepAliveTimeMinutes(5)
             .withMaxQueueSize(10)
             .withQueueSizeRejectionThreshold(10000))
 
-        //Ïß³Ì³Ø¸ôÀë
+        //çº¿ç¨‹æ± éš”ç¦»
         .andCommandPropertiesDefaults(
             HystrixCommandProperties.Setter()
                 .withExecutionIsolationStrategy(

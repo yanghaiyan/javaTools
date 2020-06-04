@@ -17,7 +17,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 /**
- * httpclient µÄ¿Í»§¶Ë
+ * httpclient çš„å®¢æˆ·ç«¯
  */
 public class HttpClientServer {
 
@@ -31,7 +31,7 @@ public class HttpClientServer {
   }
 
   /**
-   * ³õÊ¼»¯
+   * åˆå§‹åŒ–
    */
   private void init() {
     httpClient = HttpClients.createDefault();
@@ -53,7 +53,7 @@ public class HttpClientServer {
       responseEntity = JSON.parseObject(result, ResponseEntity.class);
 
     } catch (Exception e) {
-      throw new BasicException("·¢ËÍÇëÇóÊ§°Ü", e);
+      throw new BasicException("å‘é€è¯·æ±‚å¤±è´¥", e);
     }
 
     return responseEntity;
@@ -67,9 +67,9 @@ public class HttpClientServer {
       String result = EntityUtils.toString(response.getEntity());
       responseEntity = JSON.parseObject(result, ResponseEntity.class);
     } catch (ClientProtocolException e) {
-      throw new BasicException("·¢ËÍÇëÇóÊ§°Ü", e);
+      throw new BasicException("å‘é€è¯·æ±‚å¤±è´¥", e);
     } catch (IOException e) {
-      throw new BasicException("½ÓÊÜÊı¾İ½âÎöÊ§°Ü", e);
+      throw new BasicException("æ¥å—æ•°æ®è§£æå¤±è´¥", e);
     }
     return responseEntity;
   }

@@ -7,7 +7,7 @@ import java.net.URLDecoder;
 public class FileHelper {
 
   /**
-   * 获取文件路径
+
    */
   public static String getFilePath(Class<?> clazz) throws BasicException {
     String filePath = clazz.getProtectionDomain().getCodeSource().getLocation()

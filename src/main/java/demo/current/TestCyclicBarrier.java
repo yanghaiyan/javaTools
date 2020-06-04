@@ -16,7 +16,7 @@ class CyclicBarrierWorker implements Runnable {
     try {
       Thread.sleep(Math.abs(new Random().nextInt()%10000));
       System.out.println(id + " th people wait");
-      barrier.await(); // ´ó¼ÒµÈ´ı×îºóÒ»¸öÏß³Ìµ½´ï
+      barrier.await(); // å¤§å®¶ç­‰å¾…æœ€åä¸€ä¸ªçº¿ç¨‹åˆ°è¾¾
     } catch (InterruptedException | BrokenBarrierException e) {
       e.printStackTrace();
     }

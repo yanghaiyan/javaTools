@@ -5,19 +5,19 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 
 /**
- * WorkStealingPool(ÈÎÎñÇÔÈ¡£¬¶¼ÊÇÊØ»¤Ïß³Ì)
- * Ã¿¸öÏß³Ì¶¼ÓĞÒª´¦ÀíµÄ¶ÓÁĞÖĞµÄÈÎÎñ£¬Èç¹ûÆäÖĞµÄÏß³ÌÍê³É×Ô¼º¶ÓÁĞÖĞµÄÈÎÎñ£¬
- * ÄÇÃ´Ëü¿ÉÒÔÈ¥ÆäËûÏß³ÌÖĞ»ñÈ¡ÆäËûÏß³ÌµÄÈÎÎñÈ¥Ö´ĞĞ
+ * WorkStealingPool(ä»»åŠ¡çªƒå–ï¼Œéƒ½æ˜¯å®ˆæŠ¤çº¿ç¨‹)
+ * æ¯ä¸ªçº¿ç¨‹éƒ½æœ‰è¦å¤„ç†çš„é˜Ÿåˆ—ä¸­çš„ä»»åŠ¡ï¼Œå¦‚æœå…¶ä¸­çš„çº¿ç¨‹å®Œæˆè‡ªå·±é˜Ÿåˆ—ä¸­çš„ä»»åŠ¡ï¼Œ
+ * é‚£ä¹ˆå®ƒå¯ä»¥å»å…¶ä»–çº¿ç¨‹ä¸­è·å–å…¶ä»–çº¿ç¨‹çš„ä»»åŠ¡å»æ‰§è¡Œ
  */
 public class TestWorkStealingPool {
 
     public static void main(String[] args) throws IOException {
-        // ¸ù¾İcpuÊÇ¼¸ºËÀ´¿ªÆô¼¸¸öÏß³Ì
+        // æ ¹æ®cpuæ˜¯å‡ æ ¸æ¥å¼€å¯å‡ ä¸ªçº¿ç¨‹
         ForkJoinPool service = new ForkJoinPool(Runtime.getRuntime().availableProcessors(),
                 ForkJoinPool.defaultForkJoinWorkerThreadFactory,
                 null, true);
 
-        // ²é¿´µ±Ç°¼ÆËã»úÊÇ¼¸ºË
+        // æŸ¥çœ‹å½“å‰è®¡ç®—æœºæ˜¯å‡ æ ¸
         System.out.println(Runtime.getRuntime().availableProcessors());
         service.execute(new R(1000));
         service.execute(new R(3000));
@@ -28,8 +28,8 @@ public class TestWorkStealingPool {
         service.execute(new R(3000));
         service.execute(new R(3000));
 
-        // WorkStealingÊÇ¾«ÁéÏß³Ì(ÊØ»¤Ïß³Ì¡¢ºóÌ¨Ïß³Ì)£¬Ö÷Ïß³Ì²»×èÈû£¬¿´²»µ½Êä³ö¡£
-        // ĞéÄâ»ú²»Í£Ö¹£¬ÊØ»¤Ïß³Ì²»Í£Ö¹
+        // WorkStealingæ˜¯ç²¾çµçº¿ç¨‹(å®ˆæŠ¤çº¿ç¨‹ã€åå°çº¿ç¨‹)ï¼Œä¸»çº¿ç¨‹ä¸é˜»å¡ï¼Œçœ‹ä¸åˆ°è¾“å‡ºã€‚
+        // è™šæ‹Ÿæœºä¸åœæ­¢ï¼Œå®ˆæŠ¤çº¿ç¨‹ä¸åœæ­¢
         System.in.read();
     }
 
@@ -42,7 +42,7 @@ public class TestWorkStealingPool {
 
         @Override
         public void run() {
-            System.out.println(time + ":" + Thread.currentThread().getName() + "Ö´ĞĞÊ±¼äÎª£º" + System.currentTimeMillis());
+            System.out.println(time + ":" + Thread.currentThread().getName() + "æ‰§è¡Œæ—¶é—´ä¸ºï¼š" + System.currentTimeMillis());
             try {
                 TimeUnit.MILLISECONDS.sleep(time);
             } catch (InterruptedException e) {

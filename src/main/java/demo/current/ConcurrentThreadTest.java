@@ -13,11 +13,11 @@ import java.util.concurrent.*;
 
 
 public class ConcurrentThreadTest {
-    //List ÈÎÎñ
-    //Ã¿´ÎÈ¡ÖÆ¶¨¸öÊıÈÎÎñ
-    //ÈÎÎñÀ©Õ¹callable
-    //Ö¸¶¨Ïß³Ì³ØÖ´ĞĞÈÎÎñ 200msÄÚÃ»ÓĞÖ´ĞĞÍê±ÏµÄÏÂ´Î²»ÔÙÌáÈ¡
-    //Ñ­»·Ö´ĞĞ
+    //List ä»»åŠ¡
+    //æ¯æ¬¡å–åˆ¶å®šä¸ªæ•°ä»»åŠ¡
+    //ä»»åŠ¡æ‰©å±•callable
+    //æŒ‡å®šçº¿ç¨‹æ± æ‰§è¡Œä»»åŠ¡ 200mså†…æ²¡æœ‰æ‰§è¡Œå®Œæ¯•çš„ä¸‹æ¬¡ä¸å†æå–
+    //å¾ªç¯æ‰§è¡Œ
 
     private static Stack<TaskWithId> stack = new Stack<>();
     private static ExecutorService pool = Executors.newFixedThreadPool(3);
@@ -37,7 +37,7 @@ public class ConcurrentThreadTest {
             for (TaskWithId taskWithId : taskWithIds) {
                 bi.append(taskWithId.id).append(" ");
             }
-            System.out.println("±¾´ÎĞèÒªÖ´ĞĞµÄÈÎÎñ ids = " + bi.toString());
+            System.out.println("æœ¬æ¬¡éœ€è¦æ‰§è¡Œçš„ä»»åŠ¡ ids = " + bi.toString());
 
             if (taskWithIds.isEmpty()) {
                 break;
@@ -47,18 +47,18 @@ public class ConcurrentThreadTest {
                 taskWithId.setLatch(latch);
                 result.add(pool.submit(taskWithId));
             }
-            //µÈ´ılatch ÉèÖÃ¹ıÆÚÊ±¼ä
+            //ç­‰å¾…latch è®¾ç½®è¿‡æœŸæ—¶é—´
             Uninterruptibles.awaitUninterruptibly(latch, 20, TimeUnit.MICROSECONDS);
 
-            //Ã¿¸öÈÎÎñµÈ´ıÖ¸¶¨Ê±¼ä ²»ÖĞ¶ÏÊµ¼ÊÈÎÎñµÄÖ´ĞĞ »ñÈ¡½á¹û
+            //æ¯ä¸ªä»»åŠ¡ç­‰å¾…æŒ‡å®šæ—¶é—´ ä¸ä¸­æ–­å®é™…ä»»åŠ¡çš„æ‰§è¡Œ è·å–ç»“æœ
             for (Future<Integer> future : result) {
                 try {
-                    Uninterruptibles.getUninterruptibly(future, 1, TimeUnit.SECONDS);//·ÇÖĞ¶Ï»ñÈ¡½á¹û
+                    Uninterruptibles.getUninterruptibly(future, 1, TimeUnit.SECONDS);//éä¸­æ–­è·å–ç»“æœ
                     doneList.add(future.get());
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 } catch (TimeoutException e) {
-                    System.out.println("ÈÎÎñ³¬Ê±");
+                    System.out.println("ä»»åŠ¡è¶…æ—¶");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -69,7 +69,7 @@ public class ConcurrentThreadTest {
                 ri.append(integer).append(" ");
             }
             System.out.println();
-            System.out.println("±¾´ÎÍê³ÉµÄÈÎÎñ ids = " + ri.toString());
+            System.out.println("æœ¬æ¬¡å®Œæˆçš„ä»»åŠ¡ ids = " + ri.toString());
 
 
         }
@@ -81,7 +81,7 @@ public class ConcurrentThreadTest {
         while (!stack.isEmpty() && num > 0) {
             num--;
             list.add(stack.pop());
-            // System.out.println("È¡³öÈÎÎñ");
+            // System.out.println("å–å‡ºä»»åŠ¡");
         }
         return list;
     }
@@ -91,7 +91,7 @@ public class ConcurrentThreadTest {
         for (int i = 0; i < 10; i++) {
             stack.push(new TaskWithId(i));
         }
-        System.out.println("ËùÓĞµÄÈÎÎñ¼¯ºÏ=" + JSON.toJSONString(stack.elements()));
+        System.out.println("æ‰€æœ‰çš„ä»»åŠ¡é›†åˆ=" + JSON.toJSONString(stack.elements()));
         return stack;
     }
 

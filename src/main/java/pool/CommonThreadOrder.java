@@ -14,12 +14,12 @@ public class CommonThreadOrder extends HystrixCommand<String> {
 
   public CommonThreadOrder(String orderName) {
     super(Setter.withGroupKey(
-        //·şÎñ·Ö×é
+        //æœåŠ¡åˆ†ç»„
         HystrixCommandGroupKey.Factory.asKey("OrderGroup"))
-        //Ïß³Ì·Ö×é
+        //çº¿ç¨‹åˆ†ç»„
         .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey("OrderPool"))
 
-        //Ïß³Ì³ØÅäÖÃ
+        //çº¿ç¨‹æ± é…ç½®
         .andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter()
             .withCoreSize(10)
             .withKeepAliveTimeMinutes(5)

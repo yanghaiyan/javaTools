@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * ¹¤³§Àà
+ * å·¥å‚ç±»
  */
 public class ContextSSLFactory {
 
@@ -35,16 +35,16 @@ public class ContextSSLFactory {
   private static String sslVersion = "TLS";
 
   /**
-   * Ëæ»úÖÖ×Ó
+   * éšæœºç§å­
    */
   private final String SEED = "wq8251jsdkfhntioy";
 
   /**
-   * °²È«Ëæ»úÊı.
+   * å®‰å…¨éšæœºæ•°.
    */
   private SecureRandom secureRandom = new SecureRandom(SEED.getBytes());
   /**
-   * ssl »·¾³.
+   * ssl ç¯å¢ƒ.
    */
   private SSLEngine sslEngine = null;
 
@@ -83,13 +83,13 @@ public class ContextSSLFactory {
       sslEngine.setUseClientMode(false);
       sslEngine.setNeedClientAuth(false);
     } catch (Exception e) {
-      logger.error("Init SSLEngine failed£¡£¡£¡", e);
+      logger.error("Init SSLEngine failedï¼ï¼ï¼", e);
     }
   }
 
 
   /**
-   * »ñÈ¡ keystore
+   * è·å– keystore
    */
   private KeyStore getKeyStore() {
     FileInputStream inputStream = null;
@@ -117,7 +117,7 @@ public class ContextSSLFactory {
   }
 
   /**
-   * »ñÈ¡ĞÅÈÎµÄÃªµã
+   * è·å–ä¿¡ä»»çš„é”šç‚¹
    */
   private TrustManager[] getTrustManagers(KeyStore keyStore) {
     TrustManager[] kms = null;
@@ -146,7 +146,7 @@ public class ContextSSLFactory {
       keyManagerFactory.init(keyStore, KEYSTORE_PWD.toCharArray());
       kms = keyManagerFactory.getKeyManagers();
     } catch (Exception e) {
-      logger.error("»ñÈ¡·şÎñ¶ËĞÅÈÎ²ÎÊıÊ§°Ü", e);
+      logger.error("è·å–æœåŠ¡ç«¯ä¿¡ä»»å‚æ•°å¤±è´¥", e);
     }
 
     return kms;

@@ -19,7 +19,7 @@ import java.util.List;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
- * ¸ù¾İurl»ñÈ¡Ö¤ÊéÁ´
+ * æ ¹æ®urlè·å–è¯ä¹¦é“¾
  */
 public class VerifyCerChainHelper {
 
@@ -30,7 +30,7 @@ public class VerifyCerChainHelper {
       HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
       conn.connect();
 
-      Certificate[] certs = conn.getServerCertificates(); // »áÄÃµ½ÍêÕûµÄÖ¤ÊéÁ´
+      Certificate[] certs = conn.getServerCertificates(); // ä¼šæ‹¿åˆ°å®Œæ•´çš„è¯ä¹¦é“¾
 
       conn.disconnect();
 
@@ -44,7 +44,7 @@ public class VerifyCerChainHelper {
   }
 
   /**
-   * ÑéÖ¤Ö¤ÊéÁ´ ÑéÖ¤Ö¤ÊéÁ´
+   * éªŒè¯è¯ä¹¦é“¾ éªŒè¯è¯ä¹¦é“¾
    */
   public static void VerifyCerList(List<? extends Certificate> cerList, String trustAnchor) {
 
@@ -55,7 +55,7 @@ public class VerifyCerChainHelper {
       //
       CertPath cp = certificateFactory.generateCertPath(cerList);
 
-      // ÉèÖÃÃªµã
+      // è®¾ç½®é”šç‚¹
       FileInputStream input = new FileInputStream(trustAnchor);
       X509Certificate trust = (X509Certificate) certificateFactory.generateCertificate(input);
       // Create TrustAnchor

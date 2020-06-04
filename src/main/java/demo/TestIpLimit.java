@@ -10,14 +10,14 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 public class TestIpLimit {
-  // ¸ù¾İIP·Ö²»Í¬µÄÁîÅÆÍ°, Ã¿Ìì×Ô¶¯ÇåÀí»º´æ
+  // æ ¹æ®IPåˆ†ä¸åŒçš„ä»¤ç‰Œæ¡¶, æ¯å¤©è‡ªåŠ¨æ¸…ç†ç¼“å­˜
   private static LoadingCache<String, RateLimiter> caches = CacheBuilder.newBuilder()
       .maximumSize(1000)
       .expireAfterWrite(1, TimeUnit.DAYS)
       .build(new CacheLoader<String, RateLimiter>() {
         @Override
         public RateLimiter load(String key) throws Exception {
-          // ĞÂµÄIP³õÊ¼»¯ (ÏŞÁ÷Ã¿ÃëÁ½¸öÁîÅÆÏìÓ¦)
+          // æ–°çš„IPåˆå§‹åŒ– (é™æµæ¯ç§’ä¸¤ä¸ªä»¤ç‰Œå“åº”)
           return RateLimiter.create(0.1);
         }
       });

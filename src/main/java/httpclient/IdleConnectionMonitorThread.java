@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.http.conn.HttpClientConnectionManager;
 
 /**
- * Á¬½Ó³Ø¹ÜÀíÏß³Ì
+ * è¿æ¥æ± ç®¡ç†çº¿ç¨‹
  */
 public class IdleConnectionMonitorThread extends Thread {
 
@@ -27,9 +27,53 @@ public class IdleConnectionMonitorThread extends Thread {
           e.printStackTrace();
         }
       }
-      // ¹Ø±ÕÊ§Ğ§µÄÁ¬½Ó
+      // å…³é—­å¤±æ•ˆçš„è¿æ¥
       connMgr.closeExpiredConnections();
-      // ¿ÉÑ¡µÄ, ¹Ø±Õ30ÃëÄÚ²»»î¶¯µÄÁ¬½Ó
+      // å¯é€‰çš„, å…³é—­30ç§’å†…ä¸æ´»åŠ¨çš„è¿æ¥
+      connMgr.closeIdleConnections(30, TimeUnit.SECONDS);
+    }
+  }
+
+  public void shutdown() {
+    this.exitFlag = true;
+    synchronized (this) {
+      notify();
+    }
+  }
+
+}
+package httpclient;
+
+
+import java.util.concurrent.TimeUnit;
+import org.apache.http.conn.HttpClientConnectionManager;
+
+/**
+ * è¿æ¥æ± ç®¡ç†çº¿ç¨‹
+ */
+public class IdleConnectionMonitorThread extends Thread {
+
+  private final HttpClientConnectionManager connMgr;
+  private volatile boolean exitFlag = false;
+
+  public IdleConnectionMonitorThread(HttpClientConnectionManager connMgr) {
+    this.connMgr = connMgr;
+    setDaemon(true);
+  }
+
+  @Override
+  public void run() {
+    while (!this.exitFlag) {
+      synchronized (this) {
+        try {
+          this.wait(2000);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+      // å…³é—­å¤±æ•ˆçš„è¿æ¥
+      connMgr.closeExpiredConnections();
+      // å¯é€‰çš„, å…³é—­30ç§’å†…ä¸æ´»åŠ¨çš„è¿æ¥
       connMgr.closeIdleConnections(30, TimeUnit.SECONDS);
     }
   }

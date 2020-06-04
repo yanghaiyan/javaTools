@@ -7,7 +7,7 @@ import java.net.Socket;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * ¶Ë¿Ú¼ì²â
+ * ç«¯å£æ£€æµ‹
  *
  * @author YHY
  */
@@ -18,7 +18,7 @@ public class PortCheckerHelper {
   }
 
   /**
-   * ¶Ë¿ÚÎ´Õ¼ÓÃ£¬·µ»Øtrue ¶Ë¿ÚÕ¼ÓÃ£¬·µ»Øfasle
+   * ç«¯å£æœªå ç”¨ï¼Œè¿”å›true ç«¯å£å ç”¨ï¼Œè¿”å›fasle
    */
   public static boolean checkPort(String ip, int port, int timeout) {
 
