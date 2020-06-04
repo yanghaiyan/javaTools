@@ -1,7 +1,7 @@
 package netty.entity;
 
 /**
- * ÏìÓ¦ÊµÌåÀà
+ * å“åº”å®ä½“ç±»
  */
 public class ResponseEntity {
 

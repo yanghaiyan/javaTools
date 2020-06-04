@@ -11,7 +11,7 @@ import netty.client.HeartbeatClient;
 import netty.handler.HeartbeatClientHandler;
 
 /**
- * ¿Í»§¶ËÐÄÌø
+ * å®¢æˆ·ç«¯å¿ƒè·³
  */
 public class HeartbeatClientInitializer extends ChannelInitializer<SocketChannel> {
 
@@ -25,7 +25,7 @@ public class HeartbeatClientInitializer extends ChannelInitializer<SocketChannel
   protected void initChannel(SocketChannel socketChannel) throws Exception {
     ChannelPipeline pipeline = socketChannel.pipeline();
 
-    // ÊÇÊµÏÖÐÄÌøµÄ¹Ø¼ü, Ëü»á¸ù¾Ý²»Í¬µÄ IO idle ÀàÐÍÀ´²úÉú²»Í¬µÄ IdleStateEvent ÊÂ¼þ, ¶øÕâ¸öÊÂ¼þµÄ²¶»ñ, ÆäÊµ¾ÍÊÇÔÚ userEventTriggered ·½·¨ÖÐÊµÏÖµÄ.
+    // æ˜¯å®žçŽ°å¿ƒè·³çš„å…³é”®, å®ƒä¼šæ ¹æ®ä¸åŒçš„ IO idle ç±»åž‹æ¥äº§ç”Ÿä¸åŒçš„ IdleStateEvent äº‹ä»¶, è€Œè¿™ä¸ªäº‹ä»¶çš„æ•èŽ·, å…¶å®žå°±æ˜¯åœ¨ userEventTriggered æ–¹æ³•ä¸­å®žçŽ°çš„.
     pipeline.addLast(new IdleStateHandler(0, 5, 0));
     pipeline.addLast("encoder", new StringEncoder());
     pipeline.addLast("decoder", new StringDecoder());

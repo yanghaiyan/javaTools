@@ -32,7 +32,7 @@ public class HeartbeatServerHandle extends SimpleChannelInboundHandler<String> {
       if (event.state() == IdleState.READER_IDLE) {
         System.out.println("--- Server--- (READER_IDLE time out )");
         if (unRecPingTimes >= MAX_UN_REC_PING_TIMES) {
-          System.out.println("--- ·şÎñ¶Ë---(Read Timeout,  Close chanel)");
+          System.out.println("--- æœåŠ¡ç«¯---(Read Timeout,  Close chanel)");
           ctx.close();
         } else {
           unRecPingTimes++;

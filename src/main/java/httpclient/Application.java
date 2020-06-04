@@ -10,7 +10,7 @@ import org.jsoup.select.Elements;
 import org.junit.Test;
 
 /**
- * ²âÊÔ°¸Àı
+ * æµ‹è¯•æ¡ˆä¾‹
  */
 public class Application {
 
@@ -52,9 +52,9 @@ public class Application {
     String url = ipUrlStr + myIp;
     String result = httpClient.doGet(url);
     JSONObject jsonObject = JSON.parseObject(result);
-    System.out.println("¹ú¼Ò£º " + jsonObject.getJSONObject("data").get("country"));
-    System.out.println("Ê¡·İ£º " + jsonObject.getJSONObject("data").get("region"));
-    System.out.println("³ÇÊĞ£º" + jsonObject.getJSONObject("data").get("city"));
+    System.out.println("å›½å®¶ï¼š " + jsonObject.getJSONObject("data").get("country"));
+    System.out.println("çœä»½ï¼š " + jsonObject.getJSONObject("data").get("region"));
+    System.out.println("åŸå¸‚ï¼š" + jsonObject.getJSONObject("data").get("city"));
 
   }
 }

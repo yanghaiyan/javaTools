@@ -44,7 +44,7 @@ public class HeartbeatClientHandler extends SimpleChannelInboundHandler<String> 
   public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
     if (evt instanceof IdleStateEvent) {
       IdleState state = ((IdleStateEvent) evt).state();
-      // Ğ´³¬Ê±
+      // å†™è¶…æ—¶
       if (state == IdleState.WRITER_IDLE) {
         ctx.writeAndFlush(HEARTBEAT_SEQUENCE.duplicate());
       }
@@ -56,7 +56,7 @@ public class HeartbeatClientHandler extends SimpleChannelInboundHandler<String> 
   @Override
   public void channelInactive(ChannelHandlerContext ctx) throws Exception {
     super.channelInactive(ctx);
-    System.out.println("¿Í»§¶ËÓë·şÎñ¶Ë¶Ï¿ªÁ¬½Ó,¶Ï¿ªµÄÊ±¼äÎª£º" + format.format(new Date()));
+    System.out.println("å®¢æˆ·ç«¯ä¸æœåŠ¡ç«¯æ–­å¼€è¿æ¥,æ–­å¼€çš„æ—¶é—´ä¸ºï¼š" + format.format(new Date()));
 
     final EventLoop eventLoop = ctx.channel().eventLoop();
     eventLoop.schedule(new Runnable() {

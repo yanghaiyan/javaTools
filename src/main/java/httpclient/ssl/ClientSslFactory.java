@@ -7,17 +7,17 @@ import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.ssl.SSLContextBuilder;
 
 /**
- * ¿Í»§¶Ë°²È«ÑéÖ¤
+ * å®¢æˆ·ç«¯å®‰å…¨éªŒè¯
  */
 public class ClientSslFactory {
 
   /**
-   * Ëæ»úÊýÖÖ×Ó.
+   * éšæœºæ•°ç§å­.
    */
   private String seed = "wq8251jsdkfhntioy";
 
   /**
-   * °²È«Ëæ»úÊý
+   * å®‰å…¨éšæœºæ•°
    */
   private SecureRandom secureRandom = new SecureRandom(seed.getBytes());
 
@@ -42,20 +42,20 @@ public class ClientSslFactory {
 
   private void init() throws Exception {
     SSLContextBuilder builder = new SSLContextBuilder();
-    // Ä¬ÈÏ²»ÐèÒªËæ»úÊý£¬ÌØÊâÇé¿öÔÙ¼ÓÉÏ.
+    // é»˜è®¤ä¸éœ€è¦éšæœºæ•°ï¼Œç‰¹æ®Šæƒ…å†µå†åŠ ä¸Š.
     builder.setSecureRandom(null);
-    // È«²¿ÐÅÈÎ£¬²»¶Ô·þÎñ¶ËµÄÖ¤Êé½øÐÐÐ£Ñé.
+    // å…¨éƒ¨ä¿¡ä»»ï¼Œä¸å¯¹æœåŠ¡ç«¯çš„è¯ä¹¦è¿›è¡Œæ ¡éªŒ.
     builder.loadTrustMaterial((TrustStrategy) (x509Certificates, s) -> {
       for (int i = 0; i < x509Certificates.length; i++) {
-        System.out.println("·þÎñ¶ËµÄÖ¤ÊéÎª£º " + x509Certificates[i].toString());
+        System.out.println("æœåŠ¡ç«¯çš„è¯ä¹¦ä¸ºï¼š " + x509Certificates[i].toString());
       }
       return true;
     });
 
-    /*¶Ô·þÎñÆ÷¶ËÖ¤Êé½øÐÐÐ£Ñé
+    /*å¯¹æœåŠ¡å™¨ç«¯è¯ä¹¦è¿›è¡Œæ ¡éªŒ
      * .loadTrustMaterial(new File("D:\\truststore.jks"),
       *                    "123456".toCharArray(), new TrustSelfSignedStrategy())
-     *  ·¢ËÍ¿Í»§¶ËÖ¤Êé£¬·þÎñ¶ËÐ£ÑéÊ±»áÊ¹ÓÃµ½
+     *  å‘é€å®¢æˆ·ç«¯è¯ä¹¦ï¼ŒæœåŠ¡ç«¯æ ¡éªŒæ—¶ä¼šä½¿ç”¨åˆ°
      * .loadKeyMaterial(keyStore, "123456".toCharArray())
      */
 
@@ -65,7 +65,7 @@ public class ClientSslFactory {
         NoopHostnameVerifier.INSTANCE);
   }
   /**
-   * »ñÈ¡ssl»·¾³
+   * èŽ·å–sslçŽ¯å¢ƒ
    */
   public SSLConnectionSocketFactory getSslFac() {
     return sslConnectionSocketFactory;

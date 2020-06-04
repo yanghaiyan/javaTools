@@ -4,14 +4,14 @@ import java.nio.ByteOrder;
 import sun.misc.Unsafe;
 
 /**
- * ¼ì²éCPUÊÇ´ó¶Ë»¹ÊÇĞ¡¶Ë
+ * æ£€æŸ¥CPUæ˜¯å¤§ç«¯è¿˜æ˜¯å°ç«¯
  */
  class CheckCpuUtils {
 
   private static final Unsafe unsafe = Unsafe.getUnsafe();
 
   /**
-   * ·µ»Ø´ó¶Ë»¹ÊÇĞ¡¶Ë
+   * è¿”å›å¤§ç«¯è¿˜æ˜¯å°ç«¯
    */
   public  ByteOrder checkCpu() {
     long a = unsafe.allocateMemory(8);

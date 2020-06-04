@@ -1,4 +1,4 @@
-package demo;
+package algorithm.random;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,13 +10,13 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
 
 /**
- * ¶àÏß³ÌËæ»úÊı
+ * å¤šçº¿ç¨‹éšæœºæ•°
  */
 public class RanDomUtil {
 
   public static void main(String[] args) throws InterruptedException {
     for (int i = 0; i < 20; i++) {
-      System.out.println(random_select(100));
+      System.out.println(getRandListByLimit(5,20));
     }
 
   }
@@ -25,10 +25,8 @@ public class RanDomUtil {
     Runnable test = new Runnable() {
       @Override
       public void run() {
-//        UUID uuid = new UUID(ThreadLocalRandom.current().nextLong(),
-//            ThreadLocalRandom.current().nextLong());
         List<Integer> rands;
-        int[] rand = ThreadLocalRandom.current().ints(0, 10).distinct().limit(10).toArray();
+        int[] rand = getRandomsByThreadLocal(0, 10, 5);
         rands = Arrays.stream(rand).boxed().collect(Collectors.toList());
         System.out.println(rands);
       }
@@ -41,6 +39,23 @@ public class RanDomUtil {
     poolExecutor.shutdown();
   }
 
+  /**
+   * æµå¼è·å–éšæœºæ•°
+   * @param begin
+   * @param end
+   * @param num
+   * @return
+   */
+  public static int[] getRandomsByThreadLocal(int begin, int end, int num) {
+    return ThreadLocalRandom.current().ints(begin, end).distinct().limit(num).toArray();
+  }
+
+  /**
+   *
+   * @param num
+   * @param limit
+   * @return
+   */
   public static List<Integer> getRandoms(int num, int limit) {
     List<Integer> result = new ArrayList<Integer>(num);
     Random r = new Random();
@@ -56,12 +71,12 @@ public class RanDomUtil {
     return result;
   }
 
-  public static List<Integer> getRandomsList(int num, int limit) {
+  public static List<Integer> getRandomsList(int num, int begin, int end) {
     List<Integer> result = new ArrayList<Integer>(num);
     Random r = new Random();
-    int j = limit - num + 1;
-    for (int i = j; i <= limit; i++) {
-      int random = 1 + r.nextInt(i);
+    int j = end - num + 1;
+    for (int i = j; i <= end; i++) {
+      int random = begin + r.nextInt(i-num);
       if (!result.contains(random)) {
         result.add(random);
       } else {
@@ -72,25 +87,19 @@ public class RanDomUtil {
   }
 
   /**
-   * Éú³É1¡ª¡ªimitµÄËæ»úMÔª×ÓĞòÁĞ
-   * @param num
-   * @param limit
+   * ç”Ÿæˆ1â€”â€”imitçš„éšæœºMå…ƒå­åºåˆ—
    * @return
    */
-  public static int[] getRandListByLimit(int num, int limit) {
+  public static List<Integer> getRandListByLimit(int num, int limit) {
     int resultList[] = new int[num];
     Random r = new Random();
     int bound = combination(limit, num) - 1;
     getRandoms(num, limit, r.nextInt(bound), resultList);
-    return resultList;
+    return Arrays.stream(resultList).boxed().collect(Collectors.toList());
   }
 
   /**
-   *n¸öÔªËØÖĞm¸öÔªËØµÄµÚGÖÖ×éºÏ·ÅÔÚÊı×éaÖĞ
-   * @param num
-   * @param limit
-   * @param g
-   * @param result
+   * nä¸ªå…ƒç´ ä¸­mä¸ªå…ƒç´ çš„ç¬¬Gç§ç»„åˆæ”¾åœ¨æ•°ç»„aä¸­
    */
   private static void getRandoms(int num, int limit, long g, int[] result) {
     int d = 1;
@@ -107,34 +116,36 @@ public class RanDomUtil {
   }
 
   /**
-   * ÒÔÒ»¸öÔªËØ×÷Îª»º³å£¬Ëæ»úÈ¡Ä³¸öÔªËØ
-   * @param n
-   * @return
+   * ä»¥ä¸€ä¸ªå…ƒç´ ä½œä¸ºç¼“å†²ï¼Œéšæœºå–æŸä¸ªå…ƒç´ 
    */
   public static int random_select(int n) {
     int i, num = 1;
     Random rand = new Random();
     for (i = 1; i < n; i++) {
-      if (rand.nextInt() % i == 0) {     //µÈÓÚ0»òÕßÈÎºÎÒ»¸ö0~i-1Ö®¼äµÄÊı£¬±íÊ¾¸ÅÂÊ1/i¡£
+      if (rand.nextInt() % i == 0) {     //ç­‰äº0æˆ–è€…ä»»ä½•ä¸€ä¸ª0~i-1ä¹‹é—´çš„æ•°ï¼Œè¡¨ç¤ºæ¦‚ç‡1/iã€‚
         num = i;
       }
-    }//ÒÔ1/iµÄ¸ÅÂÊÌæ»»numµÄ»º´æÖµ¡£
+    }//ä»¥1/içš„æ¦‚ç‡æ›¿æ¢numçš„ç¼“å­˜å€¼ã€‚
     return num;
   }
 
   private static long factorial(int n) {
-    return (n > 1) ? n * factorial(n - 1) : 1;
+    if (n>1){
+      return n * factorial(n - 1);
+    } else {
+      return 1;
+    }
   }
 
   /**
-   * ¼ÆËãÅÅÁĞÊı£¬¼´A(n, m) = n!/(n-m)!
+   * è®¡ç®—æ’åˆ—æ•°ï¼Œå³A(n, m) = n!/(n-m)!
    */
   public static long arrangement(int n, int m) {
     return (n >= m) ? factorial(n) / factorial(n - m) : 0;
   }
 
   /**
-   * ¼ÆËã×éºÏÊı£¬¼´C(n, m) = n!/((n-m)! * m!)
+   * è®¡ç®—ç»„åˆæ•°ï¼Œå³C(n, m) = n!/((n-m)! * m!)
    */
   public static int combination(int n, int m) {
     return (n >= m) ? (int) (factorial(n) / factorial(n - m) / factorial(m)) : 1;
@@ -148,10 +159,7 @@ public class RanDomUtil {
   }
 
   /**
-   * ¼ÆËãÅÅÁĞ×éºÏ
-   * @param n
-   * @param k
-   * @return
+   * è®¡ç®—æ’åˆ—ç»„åˆ
    */
   public static int combination1(int n, int k) {
     if (n > 70 || (n == 70 && k > 25 && k < 45)) {

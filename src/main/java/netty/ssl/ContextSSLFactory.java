@@ -17,10 +17,11 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 工厂类
+ *
+ * @author
  */
 public class ContextSSLFactory {
 
-  private Logger logger = LoggerFactory.getLogger(this.getClass());
   /**
    * keystore path.
    */
@@ -33,12 +34,11 @@ public class ContextSSLFactory {
    * SSL Version.
    */
   private static String sslVersion = "TLS";
-
   /**
    * 随机种子
    */
   private final String SEED = "wq8251jsdkfhntioy";
-
+  private Logger logger = LoggerFactory.getLogger(this.getClass());
   /**
    * 安全随机数.
    */
@@ -48,9 +48,8 @@ public class ContextSSLFactory {
    */
   private SSLEngine sslEngine = null;
 
-  private static class Inner {
-
-    static ContextSSLFactory instance = new ContextSSLFactory();
+  private ContextSSLFactory() {
+    init();
   }
 
   public static ContextSSLFactory getInstance() {
@@ -60,10 +59,6 @@ public class ContextSSLFactory {
 
   public SSLEngine getSslEngine() {
     return sslEngine;
-  }
-
-  private ContextSSLFactory() {
-    init();
   }
 
   /***
@@ -86,7 +81,6 @@ public class ContextSSLFactory {
       logger.error("Init SSLEngine failed！！！", e);
     }
   }
-
 
   /**
    * 获取 keystore
@@ -135,8 +129,6 @@ public class ContextSSLFactory {
 
   /**
    *
-   * @param keyStore
-   * @return
    */
   private KeyManager[] getKeyManagersServer(KeyStore keyStore) {
     KeyManager[] kms = null;
@@ -150,5 +142,10 @@ public class ContextSSLFactory {
     }
 
     return kms;
+  }
+
+  private static class Inner {
+
+    static ContextSSLFactory instance = new ContextSSLFactory();
   }
 }

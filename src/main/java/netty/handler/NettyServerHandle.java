@@ -44,7 +44,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * netty ²Ù×÷handle
+ * netty æ“ä½œhandle
  * @author YHY
  */
 public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpRequest> {
@@ -87,7 +87,7 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
       throws BasicException {
     if (!uri.equals(getUrl)) {
       responseStatus = HttpResponseStatus.NOT_FOUND;
-      throw new BasicException("httpÂ·¾¶´íÎó");
+      throw new BasicException("httpè·¯å¾„é”™è¯¯");
     }
   }
 
@@ -131,14 +131,14 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
       throws BasicException {
     if (!(contentType.contains(APPLICATION_JSON) || contentType.contains(TEXT_JSON))) {
       responseStatus = HttpResponseStatus.UNSUPPORTED_MEDIA_TYPE;
-      throw new BasicException("httpÏûÏ¢ÀàĞÍ²»Ö§³Ö");
+      throw new BasicException("httpæ¶ˆæ¯ç±»å‹ä¸æ”¯æŒ");
     }
   }
 
   /**
-   * ´ÓÇëÇóÖĞ»ñÈ¡content-type£¬
+   * ä»è¯·æ±‚ä¸­è·å–content-typeï¼Œ
    *
-   * @param request httpÇëÇó
+   * @param request httpè¯·æ±‚
    */
   private List<String> getContentType(FullHttpRequest request) {
     if (request.headers().contains(CONTENT_TYPE)) {
@@ -150,20 +150,20 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
   }
 
   /**
-   * »ñÈ¡ÇëÇóÖĞµÄÊı¾İ
+   * è·å–è¯·æ±‚ä¸­çš„æ•°æ®
    */
   private RequestEntity getContent(FullHttpRequest request, HttpResponseStatus respStatus)
       throws BasicException {
-    // ÇëÇóµÄcontent²¿·ÖµÄbytes
+    // è¯·æ±‚çš„contentéƒ¨åˆ†çš„bytes
     byte[] reqBytes;
     RequestEntity requestEntity = null;
     String reqStr = "";
 
-    /**ÇëÇóµÄcontent²¿·Ö ByteBuf.*/
+    /**è¯·æ±‚çš„contentéƒ¨åˆ† ByteBuf.*/
     ByteBuf bufReq = request.content();
 
     if (bufReq.readableBytes() > 0) {
-      // Èç¹ûÓĞÄÚÈİ
+      // å¦‚æœæœ‰å†…å®¹
       int length = bufReq.readableBytes();
       reqBytes = new byte[length];
       if ((length != 0) && (bufReq.isReadable())) {
@@ -171,7 +171,7 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
       }
     } else {
       respStatus = HttpResponseStatus.BAD_REQUEST;
-      throw new BasicException("httpÏûÏ¢Îª¿Õ");
+      throw new BasicException("httpæ¶ˆæ¯ä¸ºç©º");
     }
 
     try {
@@ -179,14 +179,14 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
       requestEntity = JSON.parseObject(reqContent, RequestEntity.class);
     } catch (UnsupportedEncodingException e) {
       respStatus = HttpResponseStatus.BAD_REQUEST;
-      throw new BasicException("httpÏûÏ¢½âÎöÊ§°Ü");
+      throw new BasicException("httpæ¶ˆæ¯è§£æå¤±è´¥");
     }
 
     return requestEntity;
   }
 
   /**
-   * Éú³É·µ»ØÏìÓ¦
+   * ç”Ÿæˆè¿”å›å“åº”
    */
   private ByteBuf generateRspByteBuf(ResponseEntity respEntity, HttpResponseStatus respStatus)
       throws BasicException {
@@ -195,7 +195,7 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
       bufRep = wrappedBuffer(JSON.toJSONBytes(respEntity));
     } catch (Exception e) {
       respStatus = HttpResponseStatus.INSUFFICIENT_STORAGE;
-      throw new BasicException("httpÏûÏ¢±àÂëÊ§°Ü");
+      throw new BasicException("httpæ¶ˆæ¯ç¼–ç å¤±è´¥");
     }
     return bufRep;
   }
@@ -233,7 +233,7 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
   }
 
   /***
-   * ´¦ÀígetÇëÇó
+   * å¤„ç†getè¯·æ±‚
    * @param request
    * @param respStatus
    * @param ctx
@@ -249,7 +249,7 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
     String uri = request.uri();
     if (StringUtils.isBlank(uri)) {
       respStatus = HttpResponseStatus.NOT_FOUND;
-      throw new BasicException("httpÂ·¾¶´íÎó");
+      throw new BasicException("httpè·¯å¾„é”™è¯¯");
     }
     final String path = FileHelper.getFilePath(this.getClass()) + uri;
     File file = new File(path);
@@ -289,7 +289,7 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
 
 
   /**
-   * »ñÈ¡ÎÄ¼şÀàĞÍ
+   * è·å–æ–‡ä»¶ç±»å‹
    */
   private static String getFileType(File file) {
     MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
@@ -297,7 +297,7 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
   }
 
   /**
-   * ´«ÊäÎÄ¼ş
+   * ä¼ è¾“æ–‡ä»¶
    */
   private void writeFileResponse(ChannelHandlerContext ctx, RandomAccessFile randomAccessFile,
       FullHttpResponse response, FullHttpRequest request) throws IOException {
@@ -308,7 +308,7 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
     }
     ctx.write(response);
     ChannelFuture sendFileFuture;
-    //Í¨¹ıNettyµÄChunkedFile¶ÔÏóÖ±½Ó½«ÎÄ¼şĞ´Èë·¢ËÍµ½»º³åÇøÖĞ
+    //é€šè¿‡Nettyçš„ChunkedFileå¯¹è±¡ç›´æ¥å°†æ–‡ä»¶å†™å…¥å‘é€åˆ°ç¼“å†²åŒºä¸­
     sendFileFuture = ctx.write(new ChunkedFile(randomAccessFile, 0,
         fileLength, 8192), ctx.newProgressivePromise());
     sendFileFuture.addListener(new ChannelProgressiveFutureListener() {
@@ -333,7 +333,7 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
 
     ChannelFuture lastContentFuture = ctx
         .writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT);
-    //Èç¹û²»Ö§³Ökeep-Alive£¬·şÎñÆ÷¶ËÖ÷¶¯¹Ø±ÕÇëÇó
+    //å¦‚æœä¸æ”¯æŒkeep-Aliveï¼ŒæœåŠ¡å™¨ç«¯ä¸»åŠ¨å…³é—­è¯·æ±‚
     if (!HttpUtil.isKeepAlive(request)) {
       lastContentFuture.addListener(ChannelFutureListener.CLOSE);
     }
@@ -347,7 +347,7 @@ public class NettyServerHandle extends SimpleChannelInboundHandler<FullHttpReque
   @Override
   public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
     System.out.println(cause.getMessage());;
-    logger.error("·şÎñÒì³£", cause);
+    logger.error("æœåŠ¡å¼‚å¸¸", cause);
     ctx.channel().close();
   }
 }

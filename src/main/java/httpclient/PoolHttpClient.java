@@ -29,43 +29,43 @@ import org.apache.http.util.EntityUtils;
 
 
 /**
- * Á¬½Ó³Ø
+ * è¿æ¥æ± 
  *
  * @author
  */
 public class PoolHttpClient {
 
-  // ³ØÖĞ×î´óÁ¬½ÓÊı
+  // æ± ä¸­æœ€å¤§è¿æ¥æ•°
   private static final int DEFAULT_POOL_MAX_TOTAL = 300;
-  // ×î´óÂ·ÓÉÅäÖÃÊıÁ¿
+  // æœ€å¤§è·¯ç”±é…ç½®æ•°é‡
   private static final int DEFAULT_POOL_MAX_PER_ROUTE = 200;
 
-  // Ä¬ÈÏÁ¬½Ó³¬Ê±Ê±¼ä
+  // é»˜è®¤è¿æ¥è¶…æ—¶æ—¶é—´
   private static final int DEFAULT_CONNECT_TIMEOUT = 10 * 1000;
-  // Ä¬ÈÏ´ÓÁ¬½Ó³Ø»ñÈ¡Á¬½Ó³¬Ê±Ê±¼ä
+  // é»˜è®¤ä»è¿æ¥æ± è·å–è¿æ¥è¶…æ—¶æ—¶é—´
   private static final int DEFAULT_CONNECT_REQUEST_TIMEOUT = 10 * 1000;
-  // Ä¬ÈÏTCP´«Êä ³¬Ê±Ê±¼ä
+  // é»˜è®¤TCPä¼ è¾“ è¶…æ—¶æ—¶é—´
   private static final int DEFAULT_SOCKET_TIMEOUT = 10 * 1000;
   private static final String APPLICATION_JSON = "application/json";
 
-  // Á¬½Ó³Ø¹ÜÀíÆ÷
+  // è¿æ¥æ± ç®¡ç†å™¨
   private PoolingHttpClientConnectionManager gcm = null;
 
   private CloseableHttpClient httpClient = null;
 
-  // Á¬½ÓÇåÀíÏß³Ì
+  // è¿æ¥æ¸…ç†çº¿ç¨‹
   private IdleConnectionMonitorThread idleThread = null;
 
-  // Á¬½Ó³ØµÄ×î´óÁ¬½ÓÊı
+  // è¿æ¥æ± çš„æœ€å¤§è¿æ¥æ•°
   private final int maxTotal;
-  // Á¬½Ó³Ø°´routeÅäÖÃµÄ×î´óÁ¬½ÓÊı
+  // è¿æ¥æ± æŒ‰routeé…ç½®çš„æœ€å¤§è¿æ¥æ•°
   private final int maxPerRoute;
 
-  // tcp connectµÄ³¬Ê±Ê±¼ä
+  // tcp connectçš„è¶…æ—¶æ—¶é—´
   private final int connectTimeout;
-  // ´ÓÁ¬½Ó³Ø»ñÈ¡Á¬½ÓµÄ³¬Ê±Ê±¼ä
+  // ä»è¿æ¥æ± è·å–è¿æ¥çš„è¶…æ—¶æ—¶é—´
   private final int connectRequestTimeout;
-  // tcp ioµÄ¶ÁĞ´³¬Ê±Ê±¼ä
+  // tcp ioçš„è¯»å†™è¶…æ—¶æ—¶é—´
   private final int socketTimeout;
 
 
@@ -98,17 +98,17 @@ public class PoolHttpClient {
     this.gcm.setDefaultMaxPerRoute(maxPerRoute);
 
     RequestConfig requestConfig = RequestConfig.custom()
-        // ÉèÖÃÁ¬½Ó³¬Ê±
+        // è®¾ç½®è¿æ¥è¶…æ—¶
         .setConnectTimeout(this.connectTimeout)
-        // ÉèÖÃ¶ÁÈ¡³¬Ê±
+        // è®¾ç½®è¯»å–è¶…æ—¶
         .setSocketTimeout(this.socketTimeout)
-        // ÉèÖÃ´ÓÁ¬½Ó³Ø»ñÈ¡Á¬½ÓÊµÀıµÄ³¬Ê±
+        // è®¾ç½®ä»è¿æ¥æ± è·å–è¿æ¥å®ä¾‹çš„è¶…æ—¶
         .setConnectionRequestTimeout(this.connectRequestTimeout)
         .build();
 
     HttpClientBuilder builder = HttpClients.custom();
     httpClient = builder
-        /**  ×¢ÈëÁ¬½Ó¹ÜÀí*/
+        /**  æ³¨å…¥è¿æ¥ç®¡ç†*/
         .setConnectionManager(this.gcm)
         .setDefaultRequestConfig(requestConfig)
         .build();
@@ -134,13 +134,13 @@ public class PoolHttpClient {
 
   public String doGet(String url, Map<String, String> headers, Map<String, Object> params) {
 
-    /** ¹¹½¨GETÇëÇóÍ·.*/
+    /** æ„å»ºGETè¯·æ±‚å¤´.*/
     String apiUrl = getUrlWithParams(url, params);
     HttpGet httpGet = new HttpGet(apiUrl);
     httpGet.setHeader("User-Agent",
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.62 Safari/537.36");
 
-    /** ÉèÖÃheaderĞÅÏ¢.*/
+    /** è®¾ç½®headerä¿¡æ¯.*/
     if (headers != null && headers.size() > 0) {
       for (Map.Entry<String, String> entry : headers.entrySet()) {
         httpGet.addHeader(entry.getKey(), entry.getValue());
@@ -151,11 +151,11 @@ public class PoolHttpClient {
   }
 
   /**
-   * ·¢ËÍpost ÇëÇó
+   * å‘é€post è¯·æ±‚
    *
-   * @param apiUrl urlµØÖ·
-   * @param content contentÄÚÈİ
-   * @return ÏìÓ¦ÄÚÈİ
+   * @param apiUrl urlåœ°å€
+   * @param content contentå†…å®¹
+   * @return å“åº”å†…å®¹
    */
   public String doPost(String apiUrl, String content) {
 
@@ -172,7 +172,7 @@ public class PoolHttpClient {
 
 
   /**
-   * ´¦ÀíÏìÓ¦
+   * å¤„ç†å“åº”
    */
   private String handlerResp(HttpUriRequest request) {
     CloseableHttpResponse response = null;

@@ -3,6 +3,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'war'
 apply plugin: 'idea'
 sourceCompatibility = 1.8
+compileJava.options.encoding = 'UTF-8'
 
 group 'javaTools'
 version '1.0-SNAPSHOT'
@@ -16,8 +17,8 @@ jar {
 
 repositories {
     //mavenLocal()
-    maven { url "http://10.0.109.63:8081/nexus/content/repositories/public/" }
-    maven { url "http://10.0.109.63:8081/nexus/content/repositories/snapshots/" }
+    maven { url "http://nexus3.koal.com:8081/repository/maven-public/" }
+    maven { url "http://nexus3.koal.com:8081/repository/maven-snapshots/" }
     maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
 }
 

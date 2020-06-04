@@ -36,16 +36,16 @@ public class ExcelUtils<T> {
 
   public HSSFWorkbook exportExcel(String title, String[] headers, List<T> dataset) {
 
-    // ÉùÃ÷Ò»¸ö¹¤×÷±¡
+    // å£°æ˜ä¸€ä¸ªå·¥ä½œè–„
     HSSFWorkbook workbook = new HSSFWorkbook();
-    // Éú³ÉÒ»¸ö±í¸ñ
+    // ç”Ÿæˆä¸€ä¸ªè¡¨æ ¼
     HSSFSheet sheet = workbook.createSheet(title);
-    // ÉèÖÃ±í¸ñÄ¬ÈÏÁĞ¿í¶ÈÎª15¸ö×Ö½Ú
+    // è®¾ç½®è¡¨æ ¼é»˜è®¤åˆ—å®½åº¦ä¸º15ä¸ªå­—èŠ‚
     sheet.setDefaultColumnWidth(15);
 
-    // Éú³ÉÒ»¸öÑùÊ½
+    // ç”Ÿæˆä¸€ä¸ªæ ·å¼
     HSSFCellStyle style = workbook.createCellStyle();
-    // ÉèÖÃÕâĞ©ÑùÊ½
+    // è®¾ç½®è¿™äº›æ ·å¼
    // style.setFillForegroundColor(HSSFColor.SKY_BLUE.index);
     style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
     style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
@@ -54,15 +54,15 @@ public class ExcelUtils<T> {
     style.setBorderTop(HSSFCellStyle.BORDER_THIN);
     style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
 
-    // Éú³ÉÒ»¸ö×ÖÌå
+    // ç”Ÿæˆä¸€ä¸ªå­—ä½“
     HSSFFont font = workbook.createFont();
     font.setColor(HSSFColor.VIOLET.index);
     font.setFontHeightInPoints((short) 12);
     font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 
-    // °Ñ×ÖÌåÓ¦ÓÃµ½µ±Ç°µÄÑùÊ½
+    // æŠŠå­—ä½“åº”ç”¨åˆ°å½“å‰çš„æ ·å¼
     style.setFont(font);
-    // Éú³É²¢ÉèÖÃÁíÒ»¸öÑùÊ½
+    // ç”Ÿæˆå¹¶è®¾ç½®å¦ä¸€ä¸ªæ ·å¼
     HSSFCellStyle style2 = workbook.createCellStyle();
     //style2.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);
     style2.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
@@ -72,13 +72,13 @@ public class ExcelUtils<T> {
     style2.setBorderTop(HSSFCellStyle.BORDER_THIN);
     style2.setAlignment(HSSFCellStyle.ALIGN_CENTER);
     style2.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-    // Éú³ÉÁíÒ»¸ö×ÖÌå
+    // ç”Ÿæˆå¦ä¸€ä¸ªå­—ä½“
     HSSFFont font2 = workbook.createFont();
     font2.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
-    // °Ñ×ÖÌåÓ¦ÓÃµ½µ±Ç°µÄÑùÊ½
+    // æŠŠå­—ä½“åº”ç”¨åˆ°å½“å‰çš„æ ·å¼
     style2.setFont(font2);
 
-    // ²úÉú±í¸ñ±êÌâĞĞ
+    // äº§ç”Ÿè¡¨æ ¼æ ‡é¢˜è¡Œ
     HSSFRow row = sheet.createRow(0);
     for (int i = 0; i < headers.length; i++) {
       HSSFCell cell = row.createCell(i);
@@ -87,7 +87,7 @@ public class ExcelUtils<T> {
       cell.setCellValue(text);
     }
 
-    // ±éÀú¼¯ºÏÊı¾İ£¬²úÉúÊı¾İĞĞ
+    // éå†é›†åˆæ•°æ®ï¼Œäº§ç”Ÿæ•°æ®è¡Œ
     Iterator<T> it = dataset.iterator();
     int index = 0;
 
@@ -98,7 +98,7 @@ public class ExcelUtils<T> {
         row = sheet.createRow(index);
         T t = (T) it.next();
 
-        // ÀûÓÃ·´Éä£¬¸ù¾İjavabeanÊôĞÔµÄÏÈºóË³Ğò£¬¶¯Ì¬µ÷ÓÃgetXxx()·½·¨µÃµ½ÊôĞÔÖµ
+        // åˆ©ç”¨åå°„ï¼Œæ ¹æ®javabeanå±æ€§çš„å…ˆåé¡ºåºï¼ŒåŠ¨æ€è°ƒç”¨getXxx()æ–¹æ³•å¾—åˆ°å±æ€§å€¼
         Field[] fields = t.getClass().getDeclaredFields();
         for (int i = 0; i < fields.length; i++) {
           HSSFCell cell = row.createCell(i);
@@ -115,7 +115,7 @@ public class ExcelUtils<T> {
 
           Object value = getMethod.invoke(t, new Object[]{});
 
-          //È«²¿µ±×ö×Ö·û´®À´´¦Àí
+          //å…¨éƒ¨å½“åšå­—ç¬¦ä¸²æ¥å¤„ç†
 
           if (value != null) {
             String textValue = value.toString();
@@ -145,11 +145,11 @@ public class ExcelUtils<T> {
       dataList.add(entity);
     }
 
-    String[] headers = {"ĞÕÃû", "Éí·İÖ¤ºÅ", "KeyĞòÁĞºÅ", "Ç©ÃûÖ¤ÊéĞòÁĞºÅ", "¼ÓÃÜÖ¤ÊéĞòÁĞºÅ"};
-    String filename = "e:\\"+ System.currentTimeMillis() + "Ñ§ÉúĞÅÏ¢.xls";
+    String[] headers = {"å§“å", "èº«ä»½è¯å·", "Keyåºåˆ—å·", "ç­¾åè¯ä¹¦åºåˆ—å·", "åŠ å¯†è¯ä¹¦åºåˆ—å·"};
+    String filename = "e:\\"+ System.currentTimeMillis() + "å­¦ç”Ÿä¿¡æ¯.xls";
     try (OutputStream out = new FileOutputStream(new File(filename))){
       ExcelUtils<RequestEntity> eu = new ExcelUtils();
-      HSSFWorkbook workbook = eu.exportExcel("·¢Æ±ÁìÓÃ",headers,dataList);
+      HSSFWorkbook workbook = eu.exportExcel("å‘ç¥¨é¢†ç”¨",headers,dataList);
       workbook.write(out);
     } catch (FileNotFoundException e) {
       e.printStackTrace();

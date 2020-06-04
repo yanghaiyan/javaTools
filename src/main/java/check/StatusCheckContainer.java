@@ -10,14 +10,17 @@ public class StatusCheckContainer {
 
   private final Map<String, IStatusCheck> scContainer = new LinkedHashMap<>();
 
-  private static final StatusCheckContainer INSTANCE = new StatusCheckContainer();
+  private static class Inner {
+
+    private static StatusCheckContainer INSTANCE = new StatusCheckContainer();
+  }
 
   private StatusCheckContainer() {
     initDefault();
   }
 
   public static StatusCheckContainer getInstance() {
-    return INSTANCE;
+    return Inner.INSTANCE;
   }
 
   /**

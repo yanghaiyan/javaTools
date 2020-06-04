@@ -12,11 +12,11 @@ public class HystrixTest {
     CommonThreadOrder commandPhone = new CommonThreadOrder("1");
     CommonThreadOrder command = new CommonThreadOrder("2");
 
-    //×èÈû·½Ê½Ö´ĞĞ
+    //é˜»å¡æ–¹å¼æ‰§è¡Œ
     String execute = commandPhone.execute();
     System.out.println("execute=[" + execute + "]");
 
-    //Òì²½·Ç×èÈû·½Ê½
+    //å¼‚æ­¥éé˜»å¡æ–¹å¼
     Future<String> queue = command.queue();
     String value = queue.get(200, TimeUnit.MILLISECONDS);
     System.out.println("value=[" + value + "]");
