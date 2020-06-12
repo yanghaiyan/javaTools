@@ -1,11 +1,16 @@
 package netty;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import helper.PortCheckerHelper;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
+import io.netty.channel.epoll.Epoll;
+import io.netty.channel.epoll.EpollChannelOption;
+import io.netty.channel.epoll.EpollEventLoopGroup;
+import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
@@ -26,8 +31,8 @@ public class NettyServer {
   //private static NettyServerHandle handler = new NettyServerHandle();
   private Thread thread = null;
 
-  EventLoopGroup bossGroup = new NioEventLoopGroup();
-  EventLoopGroup workerGroup = new NioEventLoopGroup();
+  EventLoopGroup bossGroup;
+  EventLoopGroup workerGroup;
 
   private String ip;
   private int port;
@@ -35,6 +40,13 @@ public class NettyServer {
   public NettyServer(String ip, int port) {
     this.ip = ip;
     this.port = port;
+    bossGroup = Epoll.isAvailable() ? (new EpollEventLoopGroup(0,
+        new ThreadFactoryBuilder().setDaemon(true).setNameFormat("Netty-EpollEvent-Listener-%d")
+            .build())) : new NioEventLoopGroup();
+    workerGroup = Epoll.isAvailable() ? (new EpollEventLoopGroup(0,
+        new ThreadFactoryBuilder().setDaemon(true)
+            .setNameFormat("Netty-WorkerEpollEvent-Listener-%d").build()))
+        : new NioEventLoopGroup();
   }
 
   public void start() throws Exception {
@@ -58,28 +70,46 @@ public class NettyServer {
       public void run() {
         super.run();
         try {
-          ServerBootstrap boot = new ServerBootstrap();
-          boot.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
+          ServerBootstrap bootstrap = new ServerBootstrap();
+          bootstrap.group(bossGroup, workerGroup).channel(
+              Epoll.isAvailable() ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
               .option(ChannelOption.SO_BACKLOG, 100)
               /**boss 内存池.*/
               .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
               /** work 内存池.*/
               .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
               .handler(new LoggingHandler(LogLevel.INFO))
-             // .childHandler(new HttpsInitializer());
-             .childHandler(new HeartbeatServerInitializer(new HeartbeatServerHandle()));
+              // .childHandler(new HttpsInitializer());
+              .childHandler(new HeartbeatServerInitializer(new HeartbeatServerHandle()));
 
-          /*Start the Server*/
-          ChannelFuture future = boot.bind(address1).sync();
-          logger.info("Netty Server start success!{" + addressInfo + "}");
-          // Wait until the server socket is closed.
-          future.channel().closeFuture().sync();
-        } catch (InterruptedException e) {
+          if (Epoll.isAvailable()) {
+            bootstrap.option(EpollChannelOption.SO_REUSEPORT, true);
+            // linux系统下使用SO_REUSEPORT特性，使得多个线程绑定同一个端口
+            int cpuNum = Runtime.getRuntime().availableProcessors() / 2;
+            logger.info("using epoll reuseport and cpu:" + cpuNum);
+            for (int i = 0; i < cpuNum; i++) {
+              ChannelFuture future = bootstrap.bind(address1).await();
+              if (!future.isSuccess()) {
+                throw new Exception("bootstrap bind fail port is " + address1);
+              }
+              logger.info(" bind cpu core " + i + "! { " + address1.toString() + " }");
+            }
+          } else {
+            ChannelFuture f = bootstrap.bind(address1).sync();
+            logger.info(" start success! { " + address1.toString() + " }");
+            f.channel().closeFuture().sync();
+          }
+        } catch (Exception e) {
           e.printStackTrace();
           logger.error("NettyServer start fail{" + addressInfo + "}");
         } finally {
-          workerGroup.shutdownGracefully();
-          bossGroup.shutdownGracefully();
+          Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+              workerGroup.shutdownGracefully();
+              bossGroup.shutdownGracefully();
+            }
+          });
         }
       }
     };
