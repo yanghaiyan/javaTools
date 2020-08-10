@@ -21,7 +21,7 @@ public class HystrixTest {
     String value = queue.get(200, TimeUnit.MILLISECONDS);
     System.out.println("value=[" + value + "]");
 
-    CommonThreadUser commandUser = new CommonThreadUser("test");
+    CommonThreadUser commandUser = new CommonThreadUser("aa");
     String name = commandUser.execute();
     System.out.println("name=[" + name + "]");
   }

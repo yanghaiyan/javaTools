@@ -1,4 +1,4 @@
-package demo;
+package algorithm;
 
 public class PythagoreanSums {
 
